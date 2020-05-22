@@ -1,5 +1,5 @@
 import socket, requests, json
-#import sys
+import sys
 
 def conn(data):
     sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -7,9 +7,9 @@ def conn(data):
     try:
         sc.connect((ip, port))
         print('connection sucessful')
-        for item in data:
-            #i = sys.getsizeof(item)
-            #print(i)
+        for item in local:
+            print(sys.getsizeof(item), 'bytes sent')
+            #print()
             sc.sendall(bytes(item, 'utf-8'))
     except:
         print('connection uncessful. make sure the server is online')

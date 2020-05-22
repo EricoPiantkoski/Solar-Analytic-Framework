@@ -3,14 +3,13 @@ import ipaddress, socket
 
 def recvall(sock, length):
     msg = []
-    msg2 = b''
-    while len(msg) < length:
+    while (len(msg) < length):
         more = sock.recv(length - len(msg))
-        if not more: 
-            break
+        if not more: break
+        #print(more)
         msg.append(more)
-        msg2 += more
-
+        #msg += more
+    
     return msg
 
 
@@ -31,8 +30,9 @@ except:
 data = []
 request, addr = ss.accept()
 print('Received a connection from', addr)
-d = recvall(request, 1024)
+d = recvall(request, 68)
 data = d
+#print(data)
 
 # close socket
 ss.close()

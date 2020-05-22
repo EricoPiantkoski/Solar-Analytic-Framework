@@ -35,6 +35,7 @@ class SA:
         d = 0
         nearest_station = '' # Choosen Station
         station = False
+        print('Selecting stattion...')
 
         with open('estacoes_bdmep.csv', 'r', encoding='ISO-8859-1')as bdmep:
             estacoes = csv.reader(bdmep, delimiter =';')
@@ -47,20 +48,30 @@ class SA:
                     stations.append(line)
         
         if station:
+            print('Station selected:', station[3], station[4])
             return str(station[0])
+
+        print('Defining distance between stations...')
 
         for station in stations:
             # Uncomment to see nearby stations
             # print(station)
+            s = [0, 0]
             if d == 0:
                 d = self.distance(station)
+                s1 = station[3]
+                s2 = station[4]
                 nearest_station = station[0]
             elif d > self.distance(station):
                 d = self.distance(station)
+                s1 = station[3]
+                s2 = station[4]
                 nearest_station = station[0]
             else:
                 pass
-        
+
+        print('Station selected:', s1, s2)
+        print('nearest station:', nearest_station)
         return nearest_station 
 
     
@@ -85,6 +96,8 @@ class SA:
         end = d+'/'+month+'/'+str(day.year)
         begin = d+'/'+month+'/'+str(day.year-30)
 
+        print('Searching data...')
+
         post_login_url = 'http://www.inmet.gov.br/projetos/rede/pesquisa/inicio.php'
         request_url = 'http://www.inmet.gov.br/projetos/rede/pesquisa/gera_serie_txt.php?&mRelEstacao='+station+'&btnProcesso=serie&mRelDtInicio='+begin+'&mRelDtFim='+end+'&mAtributos=,,,,,,,,,1,,,,,,,'
         payload = {'mCod': usr, 'mSenha':pas}
@@ -102,6 +115,7 @@ class SA:
     # Creates a single list, which is a sum between the two lists
     # Returns a list with the Total Monthly Radiation (TRM), where each item of the list created previously is multiplied by the number of days in the month
     def trm(self): #Total Monthly Radiation
+        print('predicting radiation...')
         direct = [0 for i in range(12)]
         difuse = [0 for i in range(12)]
         count = 0
