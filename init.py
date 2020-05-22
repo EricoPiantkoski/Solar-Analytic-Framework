@@ -54,7 +54,7 @@ def sa(state): #state abbreviation
         state = 'RR'
     elif state == 'santa catarina':
         state = 'SC'
-    elif state == 'são paulo':
+    elif state == 'sao paulo':
         state = 'SP'
     elif state == 'sergipe':
         state = 'SE'
