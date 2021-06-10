@@ -1,0 +1,80 @@
+Nome: SANTA TERESA
+Codigo Estacao: 83798
+Latitude: -22.92
+Longitude: -43.18
+Altitude: 180
+Situacao: Desativada
+Data Inicial: 1990-03-25
+Data Final: 1990-05-31
+Periodicidade da Medicao: Diaria
+
+Data Medicao;INSOLACAO TOTAL, DIARIO(h);
+1990-03-25;null;
+1990-03-26;null;
+1990-03-27;null;
+1990-03-28;null;
+1990-03-29;null;
+1990-03-30;null;
+1990-03-31;null;
+1990-04-01;null;
+1990-04-02;null;
+1990-04-03;null;
+1990-04-04;null;
+1990-04-05;null;
+1990-04-06;null;
+1990-04-07;null;
+1990-04-08;null;
+1990-04-09;null;
+1990-04-10;null;
+1990-04-11;null;
+1990-04-12;null;
+1990-04-13;null;
+1990-04-14;null;
+1990-04-15;null;
+1990-04-16;null;
+1990-04-17;null;
+1990-04-18;null;
+1990-04-19;null;
+1990-04-20;null;
+1990-04-21;null;
+1990-04-22;null;
+1990-04-23;null;
+1990-04-24;null;
+1990-04-25;null;
+1990-04-26;null;
+1990-04-27;null;
+1990-04-28;null;
+1990-04-29;null;
+1990-04-30;null;
+1990-05-01;null;
+1990-05-02;null;
+1990-05-03;null;
+1990-05-04;null;
+1990-05-05;null;
+1990-05-06;null;
+1990-05-07;null;
+1990-05-08;null;
+1990-05-09;null;
+1990-05-10;null;
+1990-05-11;null;
+1990-05-12;null;
+1990-05-13;null;
+1990-05-14;null;
+1990-05-15;null;
+1990-05-16;null;
+1990-05-17;null;
+1990-05-18;null;
+1990-05-19;null;
+1990-05-20;null;
+1990-05-21;null;
+1990-05-22;null;
+1990-05-23;null;
+1990-05-24;null;
+1990-05-25;null;
+1990-05-26;null;
+1990-05-27;null;
+1990-05-28;null;
+1990-05-29;null;
+1990-05-30;null;
+1990-05-31;null;
+
