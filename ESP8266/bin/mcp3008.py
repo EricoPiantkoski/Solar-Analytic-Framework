@@ -43,12 +43,9 @@ class MCP3008:
         read = self.read(channel)
         U = 12 # U in
         A = (read -511.5)/20.46
-        p = U * A
+        #p = u*i
 
-        print("channel {} value: {}".format(channel, read))
-        print('Tension: ', U, 'V')
-        print('Current: ', A,'A')
-        print('Power: ', p, 'W\n')
+        return A
 
 
     

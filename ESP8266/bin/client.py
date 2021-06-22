@@ -20,10 +20,8 @@ def clientData(host, port, gain):#, spent):
     print(gain)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host, port))
-    gain = str(gain)
-
-    outmsg = gain.encode('ascii')
-    print('outmsg ='+outmsg)
-    #spent = spent.encode('ascii')
+    gain = str(gain)+'/'
+    spent = str(spent)
+    outmsg = (gain+spent).encode('ascii')
     sock.sendall(outmsg)
     sock.close()

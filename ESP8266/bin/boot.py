@@ -9,9 +9,6 @@ esp.osdebug(None)
 import gc
 gc.collect()
 
-#ssid = 'LRC-DCC'
-#password = '$%labderededcc123'
-
 ssid = 'Casa do Kami'
 password = 'Hall!159'
 
@@ -33,5 +30,5 @@ print(station.ifconfig())
 print('_____________________________________________________________')
 
 
-r = urequests.get('http://icanhazip.com')
-print(r.text)
+#r = urequests.get('http://icanhazip.com')
+#print(r.text)
