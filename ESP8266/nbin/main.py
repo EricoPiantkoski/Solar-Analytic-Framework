@@ -1,7 +1,10 @@
 import client
 from mcp3008 import MCP3008
 from time import sleep
-from dataRequest import dataGainSpentRequest as dataRequest
+import dataRequest
+import rtc
+from _thread import start_new_thread as runThread
+
 
 # use ctrl+x to exit rshell
 
@@ -27,4 +30,10 @@ if __name__ == '__main__':
     #    mcp.getCurrent(1)
     #    sleep(1)
 
-    dataRequest.setGain_Spent()
+    #dataRequest.setGain_Spent()
+    dt = dataRequest.dataGainSpentRequest()
+    runThread(dt.setGain_Spent, ())
+
+    while True:
+        print('out of thread', gaes.get_rtd())
+        time.sleep(1)

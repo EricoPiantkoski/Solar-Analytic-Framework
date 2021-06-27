@@ -40,11 +40,8 @@ class MCP3008:
         return v
 
     def getCurrent(self, channel):
-        read = self.read(channel)
-        U = 12 # U in
-        A = (read -511.5)/20.46
-        #p = u*i
-
+        #read = self.read(channel)
+        A = (self.read(channel) -511.5)/20.46 #resolution
         return A
 
 
