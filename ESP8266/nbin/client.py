@@ -16,12 +16,12 @@ def clientSet(host, port):
     #print('the server said {}'.format(repr(reply)))
     sock.close()
 
-def clientData(host, port, gain):#, spent):
-    print(gain)
+def clientData(host, port, data):
+    print(data)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host, port))
-    gain = str(gain)+'/'
-    spent = str(spent)
-    outmsg = (gain+spent).encode('ascii')
+    spent = str(data[0])+'/'
+    gain = str(data[1])
+    outmsg = (spent+gain).encode('ascii')
     sock.sendall(outmsg)
     sock.close()

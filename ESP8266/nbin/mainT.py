@@ -78,33 +78,43 @@ async def web_server():
                 conn.close()
         await asyncio.sleep(0)
 
-# async def main():
-#     host = '192.168.2.103'
-#     port = 50000
+async def main(): ##########
+    host = '192.168.2.103'
+    port = 50000
 
-async def raise_client():
-    pass
+    led = machine.Pin(2, machine.Pin.OUT)
+    led.value(0)
+    current_data = dataRequest.DataGainSpentRequest()
 
-led = machine.Pin(2, machine.Pin.OUT)
-led.value(0)
-
-current_data = dataRequest.DataGainSpentRequest()
-while True:
+    while True:
     try:
         self_public_ip = current_data.getPublicIP()
         #print(self_public_ip)
         break
     except:
         pass
+    
+    while True:
+        raise_client(host, port)
+        await asyncio.sleep(0)
+
+async def raise_client(host, port):
+    data =[]
+    momentum = momentum()
+    data.append(momentum[1])
+    data.append(momentum[2])
+
+    client_data(host, port, data)
+    await asyncio.sleep(1)
+
+
 async def momentum():
     momentum = current_data.get_consum()
     return momentum
 
 loop = asyncio.get_event_loop()
 loop.create_task(current_data.setGain_Spent())
-#loop.create_task(momentum())
-res = await asyncio.gather((momentum()))
-print(res)
+loop.create_task(main())
 loop.create_task(web_server())
 loop.run_forever()
 
