@@ -6,11 +6,8 @@ from os.path import isfile
 
 
 def searchDataStation(stations, position, pathData):
-    
     chdir(pathData)
     #print(getcwd())
-
-    
     for file in listdir():
         if isfile(file):
             if file[6:11] == stations[position][0]:

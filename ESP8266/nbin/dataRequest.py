@@ -28,7 +28,7 @@ class DataGainSpentRequest:
         count = 300
 
         while True:
-            if count == 300:
+            if count == 300: #update time every 300s
                 self.clock.uptime()
                 count = 0
             
@@ -42,10 +42,12 @@ class DataGainSpentRequest:
                 print('setGain_Spent module: ', self.real_time_data)
 
                 if self.clock.min_moment() == '00:00': # complete hour
+                #if count <= 33:
                     self.set_Hour_Gain_Spent(cashGainSpent, self.clock.fdate())
                     cashGainSpent = [] 
                 
-                if self.clock.moment() == '03:59:59':
+                if self.clock.moment() == '23:59:59':
+                #if count <= 33 and count > 3:
                     self.setDailyFile()
                 count+=1
                 await asyncio.sleep(0)
@@ -83,8 +85,6 @@ class DataGainSpentRequest:
                 if now[3] != 0: #hour == midnight
                     decrease_hour = str(now[3]-1)
                     decrease_hour = self.left_zero(decrease_hour)
-                #if len(decrease_hour) == 1:
-                    #decrease_hour = '0'+decrease_hour
 
                 reg = [self.spent, self.spent*self.U, self.gain, self.gain*self.U, decrease_hour+':'+str_now[4], str_now[3]+':'+str_now[4], datelog] #media da hora
                 with open(self.data_Spent_Gain, 'a') as sgData:
@@ -134,29 +134,32 @@ class DataGainSpentRequest:
                     now[2] -= 1
 
         for line in reversed(list(open(self.data_Spent_Gain).readlines())): 
-            if int(line[-11:-9]) == now[2]:#-1: 
-                    existData = True
-                    line = line.split(';') 
-                    gain += float(line[2])
-                    spent += float(line[0])
-                    divider +=1  
-            #print('exist data: ', existData)
-            if counter == 24:     
-                if existData:    
-                    divider -= 1                
+            try:
+                if int(line[-11:-9]) == now[2]-1: #look at the day before
+                        existData = True
+                        line = line.split(';') 
+                        gain += float(line[2])
+                        spent += float(line[0])
+                        divider +=1  
 
-                    if not self.daily_Spent_Gain in os.listdir():
-                        with open(self.daily_Spent_Gain, 'w') as daily:
-                            header = ['Spent A/h', 'Spent W/h', 'Gain A/h', 'Gain W/h', 'dateLog']
-                            reg = [spent/divider, (spent/divider)*self.U, gain/divider, (gain/divider)*self.U, '/'.join(str(item) for item in [self.left_zero(now[2]), self.left_zero(now[1]), self.left_zero(now[0])])]
-                            self.insertLine(daily, header)
-                            self.insertLine(daily, reg)
-                    else:
-                        with open(self.daily_Spent_Gain, 'a') as daily:
-                            reg = [spent/divider, (spent/divider)*self.U, gain/divider, (gain/divider)*self.U, '/'.join(str(item) for item in [self.left_zero(now[2]), self.left_zero(now[1]), self.left_zero(now[0])])]
-                            self.insertLine(daily, reg)                
-                break
-            counter += 1
+                if counter == 24:     
+                    if existData:    
+                        divider -= 1                
+
+                        if not self.daily_Spent_Gain in os.listdir():
+                            with open(self.daily_Spent_Gain, 'w') as daily:
+                                header = ['Spent A/h', 'Spent W/h', 'Gain A/h', 'Gain W/h', 'dateLog']
+                                reg = [spent/divider, (spent/divider)*self.U, gain/divider, (gain/divider)*self.U, '/'.join(str(item) for item in [self.left_zero(now[2]), self.left_zero(now[1]), self.left_zero(now[0])])]
+                                self.insertLine(daily, header)
+                                self.insertLine(daily, reg)
+                        else:
+                            with open(self.daily_Spent_Gain, 'a') as daily:
+                                reg = [spent/divider, (spent/divider)*self.U, gain/divider, (gain/divider)*self.U, '/'.join(str(item) for item in [self.left_zero(now[2]), self.left_zero(now[1]), self.left_zero(now[0])])]
+                                self.insertLine(daily, reg)      
+                    break
+                counter += 1
+            except:
+                pass
 
     def left_zero(self, item):
         if len(str(item)) == 1:

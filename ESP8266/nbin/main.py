@@ -7,6 +7,16 @@ import socket
 import machine
 import uselect as select
 
+# import network
+# sta_if = network.WLAN(network.STA_IF)
+# sta_if.active(True)
+# while True:
+#     sta_if.connect('SENAI BBG - ADM', 'S3n41@bbg2019')
+#     if sta_if.isconnected() == True:
+#         print(sta_if.ifconfig())
+#         break
+
+
 
 def momentum():
     pass
@@ -14,9 +24,9 @@ def momentum():
 # use ctrl+x to exit rshell
 def web_page():
     if led.value() == 1:
-        gpio_state="ON"
-    else:
         gpio_state="OFF"
+    else:
+        gpio_state="ON"
 
     html = """<html><head> <title>ESP Web Server</title> <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="data:,"> <style>html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
@@ -32,7 +42,6 @@ def web_page():
 async def web_server():
     port = 80
     addr = socket.getaddrinfo('0.0.0.0', port, 0, socket.SOCK_STREAM)[0][-1]
-    print('addr Server: ', addr)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(('', port))
@@ -78,33 +87,44 @@ async def web_server():
                 conn.close()
         await asyncio.sleep(0)
 
-# async def main():
-#     host = '192.168.2.103'
-#     port = 50000
+async def main(ip): ##########
+    #host = '192.168.2.104'
+    host = '192.168.100.93'
+    port = 50000
+    led = machine.Pin(2, machine.Pin.OUT)
+    led.value(1)
 
-async def raise_client():
-    pass
+    client.client_ip(host, port, ip)
+    while True:
+        while True:
+            try:
+                self_public_ip = current_data.getPublicIP()
+                
+                #print(self_public_ip)
+                break
+            except:
+                pass
+        
+        while True:
+            raise_client(host, port) #chamará o client diariamente
+            await asyncio.sleep(60)
+    await asyncio.sleep(0)
 
-led = machine.Pin(2, machine.Pin.OUT)
-led.value(0)
+def raise_client(host, port, ip = 0):
+    if ip != 0:
+        client.client_ip(host, port)
+    else:
+        client.client(host, port)
+
+
+
+
 
 current_data = dataRequest.DataGainSpentRequest()
-while True:
-    try:
-        self_public_ip = current_data.getPublicIP()
-        #print(self_public_ip)
-        break
-    except:
-        pass
-async def momentum():
-    momentum = current_data.get_consum()
-    return momentum
 
 loop = asyncio.get_event_loop()
 loop.create_task(current_data.setGain_Spent())
-#loop.create_task(momentum())
-res = await asyncio.gather((momentum()))
-print(res)
+loop.create_task(main(current_data.getPublicIP()))
 loop.create_task(web_server())
 loop.run_forever()
 

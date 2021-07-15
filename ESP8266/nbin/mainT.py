@@ -14,9 +14,9 @@ def momentum():
 # use ctrl+x to exit rshell
 def web_page():
     if led.value() == 1:
-        gpio_state="ON"
-    else:
         gpio_state="OFF"
+    else:
+        gpio_state="ON"
 
     html = """<html><head> <title>ESP Web Server</title> <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="data:,"> <style>html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
@@ -79,38 +79,42 @@ async def web_server():
         await asyncio.sleep(0)
 
 async def main(): ##########
-    host = '192.168.2.103'
-    port = 50000
-
-    led = machine.Pin(2, machine.Pin.OUT)
-    led.value(0)
-    current_data = dataRequest.DataGainSpentRequest()
-
     while True:
-    try:
-        self_public_ip = current_data.getPublicIP()
-        #print(self_public_ip)
-        break
-    except:
-        pass
-    
-    while True:
-        raise_client(host, port)
-        await asyncio.sleep(0)
+        
+        host = '192.168.2.104'
+        port = 50000
 
-async def raise_client(host, port):
+        led = machine.Pin(2, machine.Pin.OUT)
+        led.value(0)
+
+        while True:
+            try:
+                self_public_ip = current_data.getPublicIP()
+                
+                #print(self_public_ip)
+                break
+            except:
+                pass
+        
+        while True:
+            raise_client(host, port)
+            await asyncio.sleep(1)
+    await asyncio.sleep(0)
+
+def raise_client(host, port):
     data =[]
-    momentum = momentum()
-    data.append(momentum[1])
-    data.append(momentum[2])
-
-    client_data(host, port, data)
-    await asyncio.sleep(1)
-
-
-async def momentum():
     momentum = current_data.get_consum()
-    return momentum
+    data.append(momentum[1])
+    data.append(momentum[3])
+    print('raise client data: ', data)
+
+    client.client(host, port, data)
+
+
+
+
+
+current_data = dataRequest.DataGainSpentRequest()
 
 loop = asyncio.get_event_loop()
 loop.create_task(current_data.setGain_Spent())

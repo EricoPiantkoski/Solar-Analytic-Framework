@@ -1,4 +1,5 @@
-import urequests, utime, machine
+import requests, time
+from _thread import start_new_thread as runThread
 
 class CLOCK:
     def __init__(self):
@@ -11,18 +12,20 @@ class CLOCK:
 
         self.web_query_delay = 60000
         self.retry_delay = 5000
-        self.update_time = utime.ticks_ms() - self.web_query_delay
+        #self.update_time = time.ticks_ms() - self.web_query_delay
         self.url = 'http://worldtimeapi.org/api/timezone/America/Cuiaba' #see http://worldtimeapi.org/timezones
-        self.rtc = machine.RTC()
+        #rtc = machine.RTC()
 
 
     def set_time(self):
         while True:
-            if self.update_time >= self.web_query_delay:
-                response = urequests.get(self.url)
+            if True: #self.update_time >= self.web_query_delay:
+                #print(self.url)
+                response = requests.get(self.url)
 
                 if response.status_code == 200:
                     parse = response.json()
+                    #print(parse)
                     datetime = str(parse['datetime'])
                     self._year = int(datetime[0:4])
                     self._month = int(datetime[5:7])
@@ -30,18 +33,11 @@ class CLOCK:
                     self._hour = int(datetime[11:13])
                     self._minute = int(datetime[14:16])
                     self._seconds = int(datetime[17:19])
-                    subsecond = int(round(int(datetime[20:26]) / 10000))
 
-                    #update internal RTC
-                    self.rtc.datetime((self._year, self._month, self._day, 0, self._hour, self._minute, self._seconds, subsecond))
-                    self.update_time = utime.ticks_ms()
-                    #print('RTC updated')
                     #print(self.fdate()+' '+self.moment())
-
-                else:
-                    self.update_time = utime.ticks_ms() - web_query_delay + retry_delay
-            #utime.sleep(1) 
-
+                #else:
+                    #self.update_time = time.ticks_ms() - web_query_delay + retry_delay
+            #time.sleep(1) 
 
     def year(self):
         return self._year
@@ -121,3 +117,6 @@ class CLOCK:
         else:
             str_seconds = str(self._seconds)
         return str_seconds
+    
+    
+
