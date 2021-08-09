@@ -43,6 +43,10 @@ class MCP3008:
         #read = self.read(channel)
         A = (self.read(channel) -511.5)/20.46 #resolution
         return A
+    
+    def get_U(self):
+        u = 150/41,6 #150w nominal / 41,6Ah/d nominal - diferencial
+        return u
 
 
     

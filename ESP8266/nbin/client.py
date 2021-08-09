@@ -35,7 +35,29 @@ def client_ip(host, port, ip):
     sock.connect((host, port))
     ip = ip.encode('ascii')
     sock.sendall(ip)
-    prediction = sock.recv(1024)
-    prediction = prediction.decode('ascii')
-    print('prediction: ', prediction)
+
+    data = sock.recv(1024)
+    data = data.decode('ascii')
+    prediction = work_data(data)
+
     sock.close()
+    return prediction
+
+def work_data(data):
+    prediction =[]
+    aux = []
+
+    data = data.split('-')
+    for item in data:
+        item = item.split(',')
+        for it in item:
+            if it == item[0]:
+                it = float(it)
+                aux.append(it)
+            else:
+                it = int(it)
+                aux.append(it)
+        prediction.append(aux)
+        aux = []
+
+    return prediction

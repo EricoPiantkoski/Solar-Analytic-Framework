@@ -22,6 +22,7 @@ class DataGainSpentRequest:
         self.real_time_data = ['']
         self.U = 12
         self.clock = Clock()
+        self.diferencial = mcp.get_U()
 
     async def setGain_Spent(self): #async metode
         cashGainSpent = []

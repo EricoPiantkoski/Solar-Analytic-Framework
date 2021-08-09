@@ -7,37 +7,48 @@ import socket
 import machine
 import uselect as select
 
-# import network
-# sta_if = network.WLAN(network.STA_IF)
-# sta_if.active(True)
-# while True:
-#     sta_if.connect('SENAI BBG - ADM', 'S3n41@bbg2019')
-#     if sta_if.isconnected() == True:
-#         print(sta_if.ifconfig())
-#         break
-
-
+led = machine.Pin(2, machine.Pin.OUT)
+led.value(0)
 
 def momentum():
     pass
 
 # use ctrl+x to exit rshell
 def web_page():
-    if led.value() == 1:
-        gpio_state="OFF"
-    else:
-        gpio_state="ON"
+#     with open('/web/author.html', 'r') as txto:
+#         author = txto.read()
 
-    html = """<html><head> <title>ESP Web Server</title> <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="data:,"> <style>html{font-family: Helvetica; display:inline-block; margin: 0px auto; text-align: center;}
-    h1{color: #0F3376; padding: 2vh;}p{font-size: 1.5rem;}.button{display: inline-block; background-color: #e7bd3b; border: none; 
-    border-radius: 4px; color: white; padding: 16px 40px; text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}
-    .button2{background-color: #4286f4;}</style></head><body> <h1>ESP Web Server</h1> 
-    <p>GPIO state: <strong>""" + gpio_state + """</strong></p><p><a href="/?led=on"><button class="button">ON</button></a></p>
-    <p><a href="/?led=off"><button class="button button2">OFF</button></a></p></body></html>"""
-    # with open('index.html', 'r') as htmlo:
-    #     html = htmlo.read()
+#     html = """
+#    <!DOCTYPE html>
+#     <html lang="pt-br">
+#     <head>
+#         <meta charset="UTF-8">
+#         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+#         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#         <title>ESP Energy Manager</title>
+#         <link rel="shortcut icon" href="img/faviconpng.png" type="image/x-icon">
+#         <link rel="stylesheet" type="text/css"  href="style.css" />
+#     </head>
+#     <body>
+#         <header>
+#             <div class="vertical-menu">
+#             <li><a href="#" class="active">Home</a></li>
+#             <li><a href="#">Graphical View</a></li>
+#             <li><a href="#">Real Time View</a></li>
+#             <li><a href="""+author+""" rel="next">Autor</a></li>
+#             <li><a href="#" rel="next">Sobre o projeto</a></li>
+#             </div>
+#         </header>
+
+#     </body>
+#     </html>
+#     """
+
+    with open('/web/index.html', 'r') as txto:
+        html = txto.read()
+    
     return html
+
 
 async def web_server():
     port = 80
@@ -52,27 +63,33 @@ async def web_server():
     poller.register(s, select.POLLIN)
 
     while True:
+        #192.168.2.111 esp
         res = poller.poll(1)  # 1ms block
         if res:
             conn, addr = s.accept()
             print('Got a connection from %s' % str(addr))
+            await asyncio.sleep(0)
             try:
                 request = conn.recv(1024)
                 request = str(request)
                 print('Content = %s' % request)
-                led_on = request.find('/?led=on')
-                led_off = request.find('/?led=off')
-                if led_on == 6:
-                    print('LED ON')
-                    led.value(1)
-                if led_off == 6:
-                    print('LED OFF')
-                    led.value(0)
+                await asyncio.sleep(0)
+                # led_on = request.find('/?led=on')
+                # led_off = request.find('/?led=off')
+                # if led_on == 6:
+                #     print('LED ON')
+                #     led.value(1)
+                # if led_off == 6:
+                #     print('LED OFF')
+                #     led.value(0)
+                await asyncio.sleep(0)
                 response = web_page()
+                
                 conn.send('HTTP/1.1 200 OK\n')
                 conn.send('Content-Type: text/html\n')
                 conn.send('Connection: close\n\n')
                 conn.sendall(response)
+                await asyncio.sleep(0)
             except OSError:
                 print('OSError')
                 pass
@@ -80,21 +97,23 @@ async def web_server():
                 print('Value Error, sock closed')
                 conn.close()
             except:
-                print('Randon Except')
-                pass
+                print('Random except')
             finally:
-                print('finally say: closing sock')
+                print('closing sock')
                 conn.close()
         await asyncio.sleep(0)
 
 async def main(ip): ##########
-    #host = '192.168.2.104'
-    host = '192.168.100.93'
+    host = '192.168.2.104'
+    #host = '192.168.100.93'
     port = 50000
-    led = machine.Pin(2, machine.Pin.OUT)
-    led.value(1)
-
-    client.client_ip(host, port, ip)
+    try:
+        prediction = client.client_ip(host, port, ip)
+        print('from esp main: ', prediction)
+    except:
+        print('UNABLE TO CONNECT TO TCP-SERVER')
+    
+    
     while True:
         while True:
             try:
@@ -106,7 +125,10 @@ async def main(ip): ##########
                 pass
         
         while True:
-            raise_client(host, port) #chamará o client diariamente
+            try:
+                raise_client(host, port) #chamará o client diariamente
+            except:
+                print('UNABLE TO CONNECT TO TCP-SERVER')
             await asyncio.sleep(60)
     await asyncio.sleep(0)
 
@@ -115,10 +137,6 @@ def raise_client(host, port, ip = 0):
         client.client_ip(host, port)
     else:
         client.client(host, port)
-
-
-
-
 
 current_data = dataRequest.DataGainSpentRequest()
 
