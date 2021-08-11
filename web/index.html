@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP Energy Manager</title>
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/ESP8266/nbin/web/img/faviconpng.png" type="image/x-icon">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/faviconpng.png" type="image/x-icon">
     <style>
         *{
             margin: 0;
@@ -35,12 +35,9 @@
         }
         li{
             list-style-type: none;
-            background-color: #494950;
-            padding: 15px;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 12pt;
             transition: all 0.2s;
-            vertical-align: middle;
         }
         
         #check{
@@ -89,19 +86,35 @@
         #check:checked ~ .vertical-menu{
             transform: translateX(150px);
         }
+        footer{
+            background-color: #58585896;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11pt;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 100%;
+            color: rgb(178, 180, 180);
+            line-height: 1.2;
+        }
+        footer a{
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body>
     <header>
         <input type="checkbox" id="check">
-        <label id="icon" for="check"><img position= fixed src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/ESP8266/nbin/web/img/menu-icon.png"></label>
+        <label id="icon" for="check"><img position= fixed src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/menu-icon.png"></label>
         <div class="vertical-menu">
             <nav>
-                <a href="#home"><div class="menu_item" >Home</div></a>
-                <a href="#"><div class="menu_item">Real Time View</div></a>
-                <a href="#"><div class="menu_item">Graphical View</div></a>
-                <a href="#about"><div class="menu_item">About</div></a>
-                <a href="#author"><div class="menu_item">Author</div></a>
+                <li><a href="#home"><div class="menu_item" >Home</div></a></li>
+                <li><a href="#"><div class="menu_item">Real Time View</div></a></li>
+                <li><a href="#"><div class="menu_item">Graphical View</div></a></li>
+                <li><a href="#about"><div class="menu_item">About</div></a></li>
+                <li><a href="#author"><div class="menu_item">Author</div></a></li>
             </nav>
         </div>
         
@@ -150,6 +163,12 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
         </p>
     </div>
+
+    <footer>
+        <a href="https://www.instagram.com/epiantkoski/" rel="external" target="_blank"><img src="img/instagram-15.png" alt="Instagram"> <strong>ePiantkoski</strong> </a>
+        <a href="https://github.com/EricoPiantkoski" rel="external" target="_blank"><img src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/github-logo-50.png" alt="GitHub"> <strong>Érico Piantkoski</strong></a>
+        <p>Copyright&copy;2021, Solar Analytic Framework. All rights reserved.</p>
+    </footer>
 
 </body>
 </html>
