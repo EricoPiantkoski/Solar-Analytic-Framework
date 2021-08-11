@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP Energy Manager</title>
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/ESP8266/nbin/web/img/faviconpng.png" type="image/x-icon">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        h1{
+            color: rgb(210, 211, 211);
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            padding: 7px;
+            text-indent: 25px;
+            font-size: 40px;
+        }
+        h2{
+            background-color: #4949507c;
+            color: rgb(178, 180, 180);
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            padding: 7px;
+            text-indent: 25px;
+            font-size: 30px;
+        }
+        body{
+            background-color: rgb(51, 51, 51);
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 20px;
+        }
+        li{
+            list-style-type: none;
+            background-color: #494950;
+            padding: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            transition: all 0.2s;
+            vertical-align: middle;
+        }
+        
+        #check{
+            display: none;
+        }
+
+        #icon{
+            cursor: pointer;
+            padding: 15px;
+            position: fixed;
+            z-index: 1;
+        }
+        
+        .vertical-menu{
+            position: fixed;
+            height: 40%;
+            width: 150px;
+            position: fixed;
+            transition: all 0.2s linear;
+            left: -150px;
+            
+        }
+        nav{
+            width: 100%;
+            position: absolute;
+            top:50px;
+        }
+        nav a{
+            color:white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .menu_item{
+            list-style-type: none;
+            padding: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            transition: all 0.2s;
+            color:white;
+                     
+        }
+        .menu_item:hover{
+            background-color: #030303;
+        
+        }
+        #check:checked ~ .vertical-menu{
+            transform: translateX(150px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <input type="checkbox" id="check">
+        <label id="icon" for="check"><img position= fixed src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/ESP8266/nbin/web/img/menu-icon.png"></label>
+        <div class="vertical-menu">
+            <nav>
+                <a href="#home"><div class="menu_item" >Home</div></a>
+                <a href="#"><div class="menu_item">Real Time View</div></a>
+                <a href="#"><div class="menu_item">Graphical View</div></a>
+                <a href="#about"><div class="menu_item">About</div></a>
+                <a href="#author"><div class="menu_item">Author</div></a>
+            </nav>
+        </div>
+        
+    </header>
+    <div id="home">
+        <h1>
+            ESP ENERGY MANAGER
+        </h1>
+    </div>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
+    </p>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
+    </p>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
+    </p>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
+    </p>
+    <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+    </p>
+
+    
+    <div id="about">
+        <h2>Sobre o Projeto</h2>
+        <p>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+        </p>
+    </div>
+
+    <div id="author">
+        <h2>Érico Piantkoski</h2>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
+        </p>
+    </div>
+
+</body>
+</html>

@@ -16,30 +16,31 @@ def server (interface, port):
     sock.bind((interface, port))
     sock.listen(1)
     print('listen at{}'.format(sock.getsockname()))
-    prediction = ''
+    
 
     while True:
         global data
         sc, sockname = sock.accept()
-        print('we have accepted a connection from ', sockname)
+        print('connection accepted from ', sockname)
 
         message = sc.recv(10240)
         message = message.decode('ascii')
         print('\nincoming message:', repr(message))
 
         
-        if data != 0:
+        if len(message) > 15:
             data = message.split(',')
+            sc.close()
+            print('socket close')
+            return data
         else:
-            data = message 
-            red = work_data(data)
-            for item in red:
-                prediction += ''.join(str(item))
-                if item != red[-1]:
-                    prediction + '-'
+            ip = message 
+            red = start_prediction(ip)
+            prediction = work_data(red)
+            print('prediction from server: ', prediction)
             prediction = prediction.encode('ascii')
             sc.sendall(prediction)
-
+            
         sc.close()
         print('socket closed')
         break
@@ -47,10 +48,21 @@ def server (interface, port):
 def returnData():
     return data
 
-def work_data(ip):
+def work_data(red):
+    prediction = ''
+    for item in red:
+        #print('item from work data', item)
+        prediction += (str(item))
+    prediction = prediction.replace('][', '-')
+    prediction = prediction.replace(']', '')
+    prediction = prediction.replace('[', '')
+    return prediction
+
+def start_prediction(ip):
     counter = 0
     historicinsolation = False
-    clientLocation = location.geolocation(data)
+    #clientLocation = location.geolocation(data)
+    clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
     clientLocation[3] = nearest_station.stateAbbreviation(clientLocation[3])
     bdmepStations = nearest_station.dirBDMEP(clientLocation, dir_data)
 
