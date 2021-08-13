@@ -5,6 +5,7 @@ import utime
 import os
 from clock_feats import Clock
 import uasyncio as asyncio
+import sys
 #import machine
 #from _thread import start_new_thread as runThread
 
