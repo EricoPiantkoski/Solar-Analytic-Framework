@@ -172,7 +172,12 @@
 
     <div id=static-chart>
         <h2>Gráfico Estático</h2>
-        <canvas class="bar-chart"></canvas>
+        <div style="width: 100%; overflow: auto; position: relative; width: 100%;">
+            <div style="width: 3000px; height: 300px">
+                <canvas class="bar-chart"  height="300" width="0"></canvas>
+            </div>
+        </div>
+
         <script>
             var ctx = document.getElementsByClassName("bar-chart");
 
@@ -238,6 +243,10 @@
                 }]
                 },
                 options: {
+                    legend:{
+                        display: false,
+                        position: 'left'
+                    },
                     scales: {
                         yAxes: [{
                             ticks: {
@@ -270,7 +279,5 @@
         <a href="https://github.com/EricoPiantkoski" rel="external" target="_blank"><img src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/github-logo-50.png" alt="GitHub"> <strong>Érico Piantkoski</strong></a><br>
         <span style="margin-left: 60px;">Copyright&copy;2021, Solar Analytic Framework. All rights reserved.</span>
     </footer>
-    
-
 </body>
 </html>
