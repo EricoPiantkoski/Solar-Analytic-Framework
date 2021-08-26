@@ -5,125 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP Energy Manager</title>
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/faviconpng.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/faviconpng.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"></script>
-    <style>
-        html{
-            height: 100%;
-            min-height: 100%;
-        }
-        *{
-            margin: 0;
-            padding: 0;
-        }
-        h1{
-            color: rgb(84, 151, 90);
-            color: rgb(210, 211, 211);
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: center;
-            padding: 7px;
-            margin-left: 40px;
-            font-size: 40px;
-        }
-        h2{
-            background-color: #4949507c;
-            color: rgb(178, 180, 180);
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: center;
-            padding: 7px;
-            font-size: 30px;
-            text-indent: 45px;        
-        }
-        p{
-            margin-left: 50px;
-            text-align: justify;
-            font-family: 'Times New Roman', Times, serif;
-            padding: 7px;
-            color: #858484;
-
-
-        }
-        body{
-            background-color: rgb(51, 51, 51);
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 20px;
-            min-height: 100%;
-            flex-direction: column;
-            display:flex;
-        }
-        li{
-            list-style-type: none;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 12pt;
-            transition: all 0.2s;
-        }
-        
-        #check{
-            display: none;
-        }
-
-        #icon{
-            cursor: pointer;
-            padding: 15px;
-            position: fixed;
-            z-index: 1;
-        }
-        
-        .vertical-menu{
-            position: fixed;
-            height: 40%;
-            width: 150px;
-            position: fixed;
-            transition: all 0.2s linear;
-            left: -150px;
-            
-        }
-        nav{
-            width: 100%;
-            position: absolute;
-            top:50px;
-        }
-        nav a{
-            color:white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .menu_item{
-            list-style-type: none;
-            padding: 15px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 12pt;
-            transition: all 0.2s;
-            color:white;
-                     
-        }
-        .menu_item:hover{
-            background-color: #030303;
-        
-        }
-        #check:checked ~ .vertical-menu{
-            transform: translateX(150px);
-        }
-        footer{
-            bottom: 0;
-            left: 0;
-            background-color: #58585896;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 11pt;
-            width: 100%;
-            text-align: center;
-            line-height: 100%;
-            color: rgb(178, 180, 180);
-            line-height: 1.2;
-            margin-top: auto;
-        }
-        footer a{
-            text-decoration: none;
-            color: rgb(0, 0, 0);
-            line-height: 1.2;
-            text-align: justify;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -172,13 +56,31 @@
 
     <div id=static-chart>
         <h2>Gráfico Estático</h2>
-        <div style="width: 100%; overflow: auto; position: relative; width: 100%;">
-            <div style="width: 3000px; height: 300px">
+        <div style="width: 100%; overflow: auto; position: relative; width: 100%; ">
+            <div style="width: 3000px; height: 300px; margin-bottom: 10px;">
                 <canvas class="bar-chart"  height="300" width="0"></canvas>
             </div>
         </div>
 
         <script>
+            // async function load() {
+            // let url = 'http://127.0.0.1:5000/req?esp-id=1&date=04/12';
+            // let obj = null;
+            
+            // try {
+            //     obj = await (await fetch(url)).json();
+            // } catch(e) {
+            //     console.log('error');
+            // }
+            
+            //     console.log(obj);
+            //     console.log(obj.id);
+            //     console.log(obj.date_log.substring(0,5));
+            //     console.log(obj.spent);
+            //     console.log(obj.gain);
+            //     return obj
+            // }
+
             var ctx = document.getElementsByClassName("bar-chart");
 
             var charGraph = new Chart(ctx, {
@@ -187,17 +89,11 @@
                     // Legendas das Barras
                     labels: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'],
                     datasets: [{
-                        // Legenda geral
                         label: 'Aquisição',
-                        // Dados a serem inseridos nas barras
                         data: [10, 9, 12, 19, 21, 7, 8],
-                        // Define as cores de preenchimento das barras
-                        // de acordo com sua posição no vetor
                         backgroundColor: [
                             'rgba(84, 151, 90, 0.5)'
                         ],
-                        // Define as cores de preenchimento das bordas das barras
-                        // de acordo com sua posição no vetor
                         borderColor: [
                             'rgba(84, 151, 90, 1)',
                                                        
@@ -206,17 +102,11 @@
                         borderWidth: 1
                     },
                     {
-                        // Legenda geral
                         label: 'Gasto',
-                        // Dados a serem inseridos nas barras
                         data: [10, 9, 12, 19, 21, 7, 8],
-                        // Define as cores de preenchimento das barras
-                        // de acordo com sua posição no vetor
                         backgroundColor: [                           
                             'rgba(255, 99, 132, 0.5)'
                         ],
-                        // Define as cores de preenchimento das bordas das barras
-                        // de acordo com sua posição no vetor
                         borderColor: [
                             'rgba(255, 99, 132, 1)'                       
                         ],
@@ -224,17 +114,11 @@
                         borderWidth: 1
                     },
                 {
-                    // Legenda geral
                     label: 'Previsão',
-                        // Dados a serem inseridos nas barras
                         data: [10, 9, 12, 19, 21, 7, 8],
-                        // Define as cores de preenchimento das barras
-                        // de acordo com sua posição no vetor
                         backgroundColor: [
                             'rgba(255, 206, 86, 0.5)'
                         ],
-                        // Define as cores de preenchimento das bordas das barras
-                        // de acordo com sua posição no vetor
                         borderColor: [
                             'rgba(255, 206, 86, 1)'                            
                         ],
@@ -256,6 +140,7 @@
                     }
                 }
             });
+
         </script>
 
     </div>
@@ -275,8 +160,8 @@
     </div>
 
     <footer>
-        <a href="https://www.instagram.com/epiantkoski/" rel="external" target="_blank"><img src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/instagram-15.png" alt="Instagram" style="margin-left: 60px;"> <strong>ePiantkoski</strong> </a>
-        <a href="https://github.com/EricoPiantkoski" rel="external" target="_blank"><img src="https://raw.githubusercontent.com/EricoPiantkoski/Solar-Analytic-Framework/master/web/img/github-logo-50.png" alt="GitHub"> <strong>Érico Piantkoski</strong></a><br>
+        <a href="https://www.instagram.com/epiantkoski/" rel="external" target="_blank"><img src="img/instagram-15.png" alt="Instagram" style="margin-left: 60px;"> <strong>ePiantkoski</strong> </a>
+        <a href="https://github.com/EricoPiantkoski" rel="external" target="_blank"><img src="img/github-logo-50.png" alt="GitHub"> <strong>Érico Piantkoski</strong></a><br>
         <span style="margin-left: 60px;">Copyright&copy;2021, Solar Analytic Framework. All rights reserved.</span>
     </footer>
 </body>

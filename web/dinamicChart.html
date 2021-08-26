@@ -1,0 +1,98 @@
+<script src="//www.amcharts.com/lib/3/amcharts.js"></script>  
+<script src="//www.amcharts.com/lib/3/serial.js"></script>  
+<script src="//www.amcharts.com/lib/3/themes/light.js"></script>  
+  
+<div id="chartdiv"></div>  
+  
+  
+<style>  
+    html, body {  
+        width: 100%;  
+        height: 100%;  
+        margin: 0px;  
+    }  
+  
+    #chartdiv {  
+        width: 100%;  
+        height: 100%;  
+    }  
+</style>  
+  
+<script>  
+    var x = 0;  
+  
+    function generateChartData() {  
+        var chartData = [];  
+        for ( x = 0; x < 50; x++ ) {  
+            var y = 0; 
+            chartData.push( {  
+            "x": x,  
+            "y": y  
+            } );  
+        }  
+    
+        return chartData;  
+    }  
+  
+  
+    var chart = AmCharts.makeChart( "chartdiv", {  
+        "type": "serial",  
+        "theme": "light",  
+        "zoomOutButton": {  
+            "backgroundColor": '#000000',  
+            "backgroundAlpha": 0.15  
+        },  
+        "dataProvider": generateChartData(),  
+        "categoryField": "y",  
+        "categoryAxis": {  
+            "parseDates": false,  
+            "minPeriod": "DD",  
+            "dashLength": 1,  
+            "gridAlpha": 0.15,  
+            "axisColor": "#DADADA"  
+        },  
+        "graphs": [ {  
+            "id": "g1",  
+            "valueField": "y",  
+            "bullet": "round",  
+            "bulletBorderColor": "#FFFFFF",  
+            "bulletBorderThickness": 2,  
+            "lineThickness": 2,  
+            "lineColor": "#b5030d",  
+            "negativeLineColor": "#0352b5",  
+            "hideBulletsCount": 50  
+        } ],  
+        "chartCursor": {  
+            "cursorPosition": "mouse"  
+        },  
+        "chartScrollbar": {  
+            "graph": "g1",  
+            "scrollbarHeight": 40,  
+            "color": "#FFFFFF",  
+            "autoGridCount": true  
+        }  
+        } )  
+        
+        // Definir função de requisição HTTP  
+        function httpGet(theUrl){  
+            var xmlHttp = new XMLHttpRequest();  
+            xmlHttp.open( "GET", theUrl, false ); // false for synchronous request  
+            xmlHttp.send( null );  
+            return xmlHttp.responseText;  
+        }  
+        
+        
+        setInterval( function() {  
+            
+            chart.dataProvider.shift();  
+            
+            x++;  
+            var y = httpGet('http://192.168.14.106:1880/pegardados_potenciometro');  
+            console.log(y)  
+            chart.dataProvider.push( {  
+                'x': x,  
+                'y': y  
+            } );  
+            chart.validateData();  
+        }, 100 );  
+</script>  
