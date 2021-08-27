@@ -17,20 +17,23 @@ def client(host, port):
         outmsg = ",".join(msg)
         if not outmsg:
             print('from tcp-client: No data avaiable to send')
-            return 0
+            return 0 # nenhum dado disponível
+        else:
+            #create client socket
+            #print('from clientData: ', outmsg)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((host, port))
+            outmsg = outmsg.encode('ascii')
+            sock.sendall(outmsg)
+            sock.close()
+            #os.remove(oData.daily_Spent_Gain) #IMPORTANTE - REMOVER DADOS DO ESP
+            return 2 # dados enviados
 
-        #create client socket
-        #print('from clientData: ', outmsg)
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((host, port))
-        outmsg = outmsg.encode('ascii')
-        sock.sendall(outmsg)
-        sock.close()
-        #os.remove(oData.daily_Spent_Gain)
     else:
         print('from tcp-client: No data avaiable to send')
+        return 1 #arquivo inexistente
 
-def client_ip(host, port, ip):
+def get_prediction(host, port, ip):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host, port))
     ip = ip.encode('ascii')

@@ -4,80 +4,63 @@ import uasyncio as asyncio
 import usocket as socket
 import uselect as select
 from time import sleep
-import machine
-import gc
 
 
-def web_page():
-    with open('index.html', 'r') as raw_html:
-        html = raw_html.read()
-    return html
 
-async def web_server(host = '0.0.0.0', port=80):
-    addr = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)[0][-1]
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind((host, port))
-    s.listen(1)
-    print('waiting for conections on port ', port)
+async def get_public_ip():
+    public_ip = current_data.getPublicIP()
     await asyncio.sleep(0)
+    return public_ip
 
-    poller = select.poll()
-    poller.register(s, select.POLLIN)
+async def get_prediction(host, port, public_ip):
+    try:
+        prediction = client.get_prediction(host, port, public_ip)
+        await asyncio.sleep(0)
+        print(prediction)
+        return prediction
+    except:
+        print('UNABLE TO CONNECT TO TCP-SERVER')
+        await asyncio.sleep(0)
+        return 0
+
+async def get_daily_data(host, port):
+    #deve ser chamado até ter um data diário e após isso apenas uma vez por dia
+    flag = client.client(host, port)
+    await asyncio.sleep(0)
+    if flag == 0:
+        print('Any register avaiable on data')
+    elif flag == 1:
+        print('Any data avaiable')
+    elif flag == 2:
+        print('Daily data sent successfully')
+        await asyncio.sleep(86400)
+
+
+async def tasker():
+    global host #set server ip
+    global port
+
+    host = '192.168.2.100'
+    port = 5000
+
+    public_ip = get_public_ip()
 
     while True:
-        res = poller.poll(1) #1ms block
-        await asyncio.sleep(0)
-        if res:
-            conn, addr = s.accept()
-            print('connection from ', str(addr))
-            request = str(conn.recv(256))
-            print('content = ', request)
-            await asyncio.sleep(0)
+        prediction = get_prediction(host, port, public_ip)
+        if prediction == 0:
+            pflag = 0
+            await asyncio.sleep(60)
+        else:
+            pflag = 1
+            await asyncio.sleep(86400)
 
-            try:
-                response = web_page()
-                conn.send('HTTP/1.1 200 OK\n')
-                conn.send('Content-Type: text/html\n')
-                conn.send('Connection: close\n\n')
-                conn.sendall(response)
-                conn.close()
-                await asyncio.sleep(0)
-            except OSError:
-                print('OSError')
-                try:
-                    conn.close()
-                    await asyncio.sleep(0)
-                except:
-                    await asyncio.sleep(0)
-            except ValueError:
-                print('ValueError')
-                try:
-                    conn.close()
-                    await asyncio.sleep(0)
-                except:
-                    await asyncio.sleep(0)
-            except MemoryError:
-                print('MemoryError')
-                machine.reset()
-                gc.collect()
-                try:
-                    conn.close()
-                    await asyncio.sleep(0)
-                except:
-                    await asyncio.sleep(0)
-            # except:
-            #     print('Randon Except')
-            #     try:
-            #         conn.close()
-            #         await asyncio.sleep(0)
-            #     except:
-            #         await asyncio.sleep(0)
+        
+
 
 if __name__ == '__main__':
     current_data = dataRequest.DataGainSpentRequest()
     
     loop = asyncio.get_event_loop()
     loop.create_task(current_data.setGain_Spent())
-    #loop.create_task(web_server())
+    loop.create_task(tasker())
     loop.run_forever()

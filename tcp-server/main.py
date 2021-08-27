@@ -23,7 +23,7 @@ if __name__ == '__main__':
         data = server.returnData()
         if data != 0:
             if not empirical_data in os.listdir(dir_data):
-                                with open(empirical_data, 'w') as csvFile:
+                with open(empirical_data, 'w') as csvFile:
                     spamwriter = csv.writer(csvFile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
                     spamwriter.writerow(['Spent Ah/d', 'Spent Wh/d', 'Gain Ah/d', 'Gain Wh/d', 'Datelog'])
                     for item in data:
