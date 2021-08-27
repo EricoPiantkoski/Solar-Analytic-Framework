@@ -14,7 +14,7 @@ def server (interface, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((interface, port))
-    sock.listen(1)
+    sock.listen(5)
     print('listen at{}'.format(sock.getsockname()))
     
 
@@ -61,7 +61,7 @@ def work_data(red):
 def start_prediction(ip):
     counter = 0
     historicinsolation = False
-    #clientLocation = location.geolocation(data)
+    #clientLocation = location.geolocation(ip)
     clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
     clientLocation[3] = nearest_station.stateAbbreviation(clientLocation[3])
     bdmepStations = nearest_station.dirBDMEP(clientLocation, dir_data)

@@ -26,7 +26,7 @@ def client(host, port):
             outmsg = outmsg.encode('ascii')
             sock.sendall(outmsg)
             sock.close()
-            #os.remove(oData.daily_Spent_Gain) #IMPORTANTE - REMOVER DADOS DO ESP
+            #os.remove(oData.daily_Spent_Gain) #IMPORTANTE - REMOVE DADOS DO ESP
             return 2 # dados enviados
 
     else:

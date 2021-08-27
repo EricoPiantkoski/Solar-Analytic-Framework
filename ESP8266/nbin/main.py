@@ -1,4 +1,5 @@
 import dataRequest
+import client
 
 import uasyncio as asyncio
 import usocket as socket
@@ -7,9 +8,8 @@ from time import sleep
 
 
 
-async def get_public_ip():
+def get_public_ip():
     public_ip = current_data.getPublicIP()
-    await asyncio.sleep(0)
     return public_ip
 
 async def get_prediction(host, port, public_ip):
@@ -41,26 +41,25 @@ async def tasker():
     global port
 
     host = '192.168.2.100'
-    port = 5000
-
+    port = 50000 #can generate OSError
     public_ip = get_public_ip()
 
     while True:
-        prediction = get_prediction(host, port, public_ip)
+        prediction = client.get_prediction(host, port, public_ip)
         if prediction == 0:
             pflag = 0
+            print('pflag = {}'.format(pflag))
             await asyncio.sleep(60)
         else:
             pflag = 1
+            print('pflag = {}'.format(pflag))
+            print('PREDICTION from main: ',prediction)
             await asyncio.sleep(86400)
-
-        
-
 
 if __name__ == '__main__':
     current_data = dataRequest.DataGainSpentRequest()
     
     loop = asyncio.get_event_loop()
-    loop.create_task(current_data.setGain_Spent())
+    #loop.create_task(current_data.setGain_Spent())
     loop.create_task(tasker())
     loop.run_forever()
