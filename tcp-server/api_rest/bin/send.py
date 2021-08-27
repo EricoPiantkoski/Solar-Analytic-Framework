@@ -17,16 +17,30 @@ def post(url, data):
 
 endpoint = "http://127.0.0.1:5000/f-data"
 
-
-data = {
-    'id': 1,
-    'date_log': '25/08/2021',
+data = { 
+    'id_esp' : 1,
+    'date_log': '31/08/2021',
     'data':{
-        'spent': 7,
-        'gain': 10,
-        'prediction': 8
+        'spent': 4,
+        'gain': 5,
+        'prediction': 5
     }
-}    
+}
+
+
+
+# data = { 
+#     'id_data': 1234,
+#     'content':{
+#         'id_esp': 1,
+#         'date_log': '27/08/2021',
+#         'data':{
+#             'spent': 4,
+#             'gain': 5,
+#             'prediction': 5
+#         }
+#     }
+# }
 
 #   "language": "Python$",
 #   "framework": "Flask"#,

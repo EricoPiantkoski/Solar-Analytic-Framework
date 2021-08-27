@@ -13,54 +13,72 @@ def index():
 @app.route('/req', methods=['GET'])
 def get_data():
     #if key doesn't exist, return none
-    esp_id = request.args.get('esp-id')
     date_req = request.args.get('date')
-    #print(response)
-
+    esp_id = request.args.get('esp-id')
+  
     try:
-        if int(esp_id) == response['id']:
-            if str(date_req) == response['date_log'][0:5]:
-                return response
-        else:
-            raise RuntimeError("Request not understood")
+        if date_req == response[date_req]['date_log']:
+            if esp_id == str(response[date_req]['id_esp']):
+                return response[date_req]
+            else:
+                raise RuntimeError("Request not understood")
     except NameError:
         return 'No data yet'
-    
+    # try:
+    #     if int(esp_id) == response['id']:
+    #         if str(date_req) == response['date_log'][0:5]:
+    #             return response
+    #     else:
+    #         raise RuntimeError("Request not understood")
+    # except NameError:
+    #     return 'No data yet'
+
+@app.route('/req/getall', methods=['GET'])
+def get_alldata():
+    return response
 
 @app.route('/f-data', methods=['POST', 'OPTIONS'])
 def receive_data():
-    global id
-    global datelog #dd/mm/yyyy
-    global spent #wh/m2
-    global gain #wh/m2
     global response #to-json
+    try:
+        if response:
+            flag = 1
+    except NameError:
+        flag = 0
 
     if request.method == "OPTIONS": # CORS prefligh
         return _build_cors_prelight_response()
     elif request.method == "POST":
         request_data = request.get_json()
-        response = {
-            'id': request_data['id'],
-            'date_log': request_data['date_log'],
-            'data':{
-                'spent': request_data['data']['spent'],
-                'gain': request_data['data']['gain'],
-                'prediction': request_data['data']['prediction']
+        if flag == 0:         
+            response = { 
+                request_data['date_log']:{
+                    'id_esp': request_data['id_esp'],
+                    'date_log': request_data['date_log'],
+                    'data':{
+                        'spent': request_data['data']['spent'],
+                        'gain': request_data['data']['gain'],
+                        'prediction': request_data['data']['prediction']
+                    }
+                }
             }
-        }
-        atribute_data(response) 
+        
+        else:
+            response[request_data['date_log']] = {
+                    'id_esp': request_data['id_esp'],
+                    'date_log': request_data['date_log'],
+                    'data':{
+                        'spent': request_data['data']['spent'],
+                        'gain': request_data['data']['gain'],
+                        'prediction': request_data['data']['prediction']
+                    }
+            }
         
         return _corsify_actual_response(jsonify(response))
 
     else:
         raise RuntimeError("Weird - don't know how to handle method {}".format(request.method))
 
-
-def atribute_data(response):
-    id = response['id']
-    datelog = response['date_log']
-    spent = response['data']['spent']
-    gain = response['data']['gain']
 
 def _build_cors_prelight_response():
     response = make_response()
@@ -74,4 +92,4 @@ def _corsify_actual_response(response):
     return response
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
