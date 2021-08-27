@@ -1,5 +1,5 @@
-async function get_api_data(esp_id, date, flag = null) {
-    let url = 'http://127.0.0.1:5000/req?esp-id='+esp_id.toString()+'&date='+date.toString();
+async function get_api_data(date, esp_id, flag = null) {
+    let url = 'http://127.0.0.1:5000/req?date='+date.toString()+'&esp-id='+esp_id.toString();
     let obj = null;
     
     try {
@@ -12,18 +12,19 @@ async function get_api_data(esp_id, date, flag = null) {
         // console.log(obj.date_log.substring(0,5));
         // console.log(obj.data.spent);
         // console.log(obj.data.gain);
+        console.log(obj)
         if (flag){
             if(flag == 0){ // flag == 0 -> obj
                 return obj
-            }else if(flag == 'id'){ // flag == 1 -> id
-                return obj.id
-            }else if(flag == 'date_log'){ // flag == 2 -> date_log
+            }else if(flag == 1){ // flag == 1 -> id
+                return obj.id_esp
+            }else if(flag == 2){ // flag == 2 -> date_log
                 return obj.date_log
-            }else if(flag == 'spent'){ // flag == 3 -> spent
+            }else if(flag == 3){ // flag == 3 -> spent
                 return obj.data.spent
-            }else if(flag = 'gain'){ // flag == 4 -> gain
+            }else if(flag = 4){ // flag == 4 -> gain
                 return obj.data.gain
-            }else if(flag = 'prediction'){ // flag == 5 -> prediction
+            }else if(flag = 5){ // flag == 5 -> prediction
                 return obj.data.prediction
             }
         }
@@ -32,7 +33,7 @@ async function get_api_data(esp_id, date, flag = null) {
 
 async function set_chart(esp_id='1', date){
 
-    esp_data = await get_api_data(esp_id, date);
+    esp_data = await get_api_data(date, esp_id);
     var ctx = document.getElementsByClassName("bar-chart");
     //solve_data()          
     var charGraph = new Chart(ctx, {
@@ -42,7 +43,7 @@ async function set_chart(esp_id='1', date){
             labels: [
                 format_label_date(-2)+'/'+month, 
                 format_label_date(-1)+'/'+month, 
-                f_now, 
+                f_now+'/'+year, 
                 format_label_date(1)+'/'+month, 
                 format_label_date(2)+'/'+month, 
                 format_label_date(3)+'/'+month,
@@ -51,13 +52,13 @@ async function set_chart(esp_id='1', date){
             datasets: [{
                 label: 'Aquisição',
                 data: [
-                    esp_data.data.gain, 
-                    9, 
-                    await get_api_data(esp_id, f_now, 4), 
-                    19, 
-                    21, 
-                    7, 
-                    8
+                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 4),
+                    await get_api_data(f_now+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(3)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(4)+'/'+month+'/'+year, esp_id, 4),
                 ],
                 backgroundColor: [
                     'rgba(84, 151, 90, 0.5)'
@@ -71,7 +72,15 @@ async function set_chart(esp_id='1', date){
             },
             {
                 label: 'Gasto',
-                data: [10, 9, 12, 19, 21, 7, 8],
+                data: [
+                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 3),
+                    await get_api_data(f_now+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(3)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(4)+'/'+month+'/'+year, esp_id, 3),
+                ],
                 backgroundColor: [                           
                     'rgba(255, 99, 132, 0.5)'
                 ],
@@ -83,7 +92,15 @@ async function set_chart(esp_id='1', date){
             },
         {
             label: 'Previsão',
-                data: [10, 9, 12, 19, 21, 7, 8],
+                data: [
+                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 5),
+                    await get_api_data(f_now+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(3)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(4)+'/'+month+'/'+year, esp_id, 5),
+                ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.5)'
                 ],
@@ -218,4 +235,4 @@ year = date.getFullYear();
 f_now = day+'/'+month
 //console.log(f_now)
 
-set_chart(1, f_now);
+set_chart(1, f_now+'/'+year);
