@@ -17,6 +17,7 @@ station = network.WLAN(network.STA_IF)
 ap_if.active(False)
 station.active(True)
 station.connect(ssid, password)
+#station.connect()
 
 while station.isconnected() == False:
   pass

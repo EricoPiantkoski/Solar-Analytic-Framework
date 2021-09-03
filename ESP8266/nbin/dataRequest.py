@@ -173,6 +173,31 @@ class DataGainSpentRequest:
     def get_consum(self):
         return self.real_time_data
 
+    def get_daily_data(self):
+        daily_data = []
+        if self.daily_Spent_Gain in os.listdir():
+            with open(self.daily_Spent_Gain, 'r') as daily_txt: #quero add um registro por dia, mas para os testes isso não importa
+                lines = daily_txt.readlines()
+                for line in lines:
+                    line = line.replace('\n', '').split(';')
+                    for index, value in enumerate(line):
+                        try:
+                            value = float(value)
+                            line[index] = value
+                        except:
+                            value = value.replace("'", '').replace(' ','')
+                            line[index] = value
+                    daily_data.append(line)
+            if not daily_data:
+                print('No data avaiable to send')
+                return 0
+            else:
+                return daily_data #returns a list - each day is an item - [[spent(A)float, spent(W)float, gain(A)float, gain(w)float, date str]]
+
+        else:
+            print('No data avaiable to send')
+            return 0
+
 ##############
 # def main():
 #     req = DataGainSpentRequest()

@@ -1,5 +1,9 @@
 async function get_api_data(date, esp_id, flag = null) {
-    let url = 'http://127.0.0.1:5000/req?date='+date.toString()+'&esp-id='+esp_id.toString();
+    if(date.length == 9){
+        date = "0"+date
+    }
+    //console.log(date.length)
+    let url = 'https://gaes.pythonanywhere.com/req?date='+date.toString()+'&esp-id='+esp_id.toString();
     let obj = null;
     
     try {
@@ -7,12 +11,6 @@ async function get_api_data(date, esp_id, flag = null) {
     } catch(e) {
         console.log('error');
     }
-        // console.log(obj);
-        // console.log(obj.id);
-        // console.log(obj.date_log.substring(0,5));
-        // console.log(obj.data.spent);
-        // console.log(obj.data.gain);
-        console.log(obj)
         if (flag){
             if(flag == 0){ // flag == 0 -> obj
                 return obj
@@ -22,9 +20,10 @@ async function get_api_data(date, esp_id, flag = null) {
                 return obj.date_log
             }else if(flag == 3){ // flag == 3 -> spent
                 return obj.data.spent
-            }else if(flag = 4){ // flag == 4 -> gain
+            }else if(flag == 4){ // flag == 4 -> gain
                 return obj.data.gain
-            }else if(flag = 5){ // flag == 5 -> prediction
+            }else if(flag == 5){ // flag == 5 -> prediction
+                console.log(obj)
                 return obj.data.prediction
             }
         }
@@ -130,21 +129,21 @@ async function set_chart(esp_id='1', date){
 function format_label_date(iterator){
     if (month == 5|| month == 7 || month == 10 || month ==12){
         if (iterator<0){
-            if (day-iterator==-1){
+            if (Number(day)-iterator==-1){
                 return '29'
-            }else if (day-iterator==0){
+            }else if (Number(day)-iterator==0){
                 return '30'
             }else {
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(day+iterator==35){
+            if(Number(day)+iterator==35){
                 return '04'
-            }else if(day+iterator==34){
+            }else if(Number(day)+iterator==34){
                 return '03'
-            }else if(day+iterator==33){
+            }else if(Number(day)+iterator==33){
                 return '02'
-            }else if(day+iterator==32){
+            }else if(Number(day)+iterator==32){
                 return '01'
             }else {
                 return Number(day)+iterator
@@ -168,13 +167,13 @@ function format_label_date(iterator){
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(day+iterator==35){
+            if(Number(day)+iterator==35){
                 return '04'
-            }else if(day+iterator==34){
+            }else if(Number(day)+iterator==34){
                 return '03'
-            }else if(day+iterator==33){
+            }else if(Number(day)+iterator==33){
                 return '02'
-            }else if(day+iterator==32){
+            }else if(Number(day)+iterator==32){
                 return '01'
             }else {
                 return Number(day)+iterator
@@ -183,21 +182,21 @@ function format_label_date(iterator){
     }else if(month == 1 || month == 8){
         
         if (iterator<0){
-            if (day-iterator==-1){
+            if (Number(day)-iterator==-1){
                 return '30'
-            }else if (day-iterator==0){
+            }else if (Number(day)-iterator==0){
                 return '31'
             }else {
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(day+iterator==35){
+            if(Number(day)+iterator==35){
                 return '04'
-            }else if(day+iterator==34){
+            }else if(Number(day)+iterator==34){
                 return '03'
-            }else if(day+iterator==33){
+            }else if(Number(day)+iterator==33){
                 return '02'
-            }else if(day+iterator==32){
+            }else if(Number(day)+iterator==32){
                 return '01'
             }else {
                 return Number(day)+iterator
@@ -205,23 +204,23 @@ function format_label_date(iterator){
         }
     }else{
         if (iterator<0){
-            if (day-iterator==-1){
+            if (Number(day)-iterator==-1){
                 return '30'
-            }else if (day-iterator==0){
+            }else if (Number(day)-iterator==0){
                 return '31'
-            }else {
+            }else {                
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(day+iterator==34){
+            if(Number(day)+iterator==34){
                 return '04'
-            }else if(day+iterator==33){
+            }else if(Number(day)+iterator==33){
                 return '03'
-            }else if(day+iterator==32){
+            }else if(Number(day)+iterator==32){
                 return '02'
-            }else if(day+iterator==31){
+            }else if(Number(day)+iterator==31){
                 return '01'
-            }else {
+            }else {                
                 return Number(day)+iterator
             }
         }
