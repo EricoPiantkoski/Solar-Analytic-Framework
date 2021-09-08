@@ -48,7 +48,7 @@ async def tasker():
             client.client(host, port, public_ip)
             daily_data = current_data.get_daily_data()
             if daily_data != 0:
-                await asyncio.sleep(10)
+                await asyncio.sleep(8)
                 client.client(host, port, daily_data)
                 #send_to(daily_data, prediction) #send to api
                 await asyncio.sleep(86400)
