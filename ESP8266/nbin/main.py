@@ -35,7 +35,8 @@ async def tasker():
     global daily_data
 
     
-    host = '192.168.2.100'
+    #host = '192.168.2.100'
+    host = '192.168.1.109'
     port = 50000 #can generate OSError
     public_ip = get_public_ip()
    
@@ -48,7 +49,7 @@ async def tasker():
             client.client(host, port, public_ip)
             daily_data = current_data.get_daily_data()
             if daily_data != 0:
-                await asyncio.sleep(8)
+                await asyncio.sleep(15)
                 client.client(host, port, daily_data)
                 #send_to(daily_data, prediction) #send to api
                 await asyncio.sleep(86400)

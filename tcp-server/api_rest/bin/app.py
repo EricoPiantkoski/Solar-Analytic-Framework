@@ -1,15 +1,18 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 import json
+import requests
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['JSON_SORT_KEYS'] = False
 
+
 @app.route('/')
 @cross_origin()
 def index():
     return "apitest"
+
 
 @app.route('/req', methods=['GET'])
 def get_data():
@@ -25,18 +28,12 @@ def get_data():
                 raise RuntimeError("Request not understood")
     except NameError:
         return 'No data yet'
-    # try:
-    #     if int(esp_id) == response['id']:
-    #         if str(date_req) == response['date_log'][0:5]:
-    #             return response
-    #     else:
-    #         raise RuntimeError("Request not understood")
-    # except NameError:
-    #     return 'No data yet'
+
 
 @app.route('/req/getall', methods=['GET'])
 def get_alldata():
     return response
+
 
 @app.route('/f-data', methods=['POST', 'OPTIONS'])
 def receive_data():
@@ -58,27 +55,26 @@ def receive_data():
                     'id_esp': request_data['id_esp'],
                     'date_log': request_data['date_log'],
                     'data':{
-                        'spent': key_verify('spent', request_data['data']),
-                        'gain': key_verify('gain', request_data['data']),
-                        'prediction': key_verify('prediction', request_data['data'])
+                        'spent': key_verify('spent', request_data['data'], request_data),
+                        'gain': key_verify('gain', request_data['data'], request_data),
+                        'prediction': key_verify('prediction', request_data['data'], request_data)
                     }
                 }
             }
+           
 
         else:
-
             response[request_data['date_log']] = {
-                'id_esp': key_verify('id_esp', request_data),
                 'id_esp': request_data['id_esp'],
                 'date_log': request_data['date_log'],
                 'data':{
                     #'spent': request_data['data']['spent'],
-                    'spent': key_verify('spent', request_data['data']),
-                    'gain': key_verify('gain', request_data['data']),
-                    'prediction': key_verify('prediction', request_data['data'])
+                    'spent': key_verify('spent', request_data['data'], request_data),
+                    'gain': key_verify('gain', request_data['data'], request_data),
+                    'prediction': key_verify('prediction', request_data['data'], request_data)
                 }
             }
-
+            
         return _corsify_actual_response(jsonify(response))
 
     else:
@@ -92,15 +88,26 @@ def _build_cors_prelight_response():
     response.headers.add('Access-Control-Allow-Methods', "*")
     return response
 
+
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
-def key_verify(key, req):
-    if key in req:
-        return req[key]
+
+def key_verify(key, req_in, req):
+    if key in req_in:
+        return req_in[key]
     else:
-        return 0
+        end = 'https://gaes.pythonanywhere.com/req?date='+req['date_log']+'&esp-id='+str(req['id_esp'])
+        try:
+            resp = requests.get(end).json()
+            if resp['data'][key] != 0:
+                return resp['data'][key]
+            else:
+                return 0
+        except:
+            return 0
+       
 
 if __name__ == "__main__":
     app.run(debug=False)

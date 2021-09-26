@@ -42,7 +42,6 @@ def bdmepcsvtolist(file, datapath): # Turns bdmepdata.txt in list: historicalins
     
 
 def averageinsolation(historicinsolation):
-
     jan = []
     feb = []
     mar = []
@@ -225,8 +224,20 @@ def averageinsolation(historicinsolation):
                         count += 1
                 
                 imD.append([photoperiod/count, j, i])
-
+    
     return imD  # average daily isolation (photoperiod for each day) [imD, day, month]
+
+
+def get_averageinsolation_for_day(day, month, historical_insolation):
+    imd = averageinsolation(historical_insolation)
+    #print('imd: ', imd)
+    
+    for item in imd:
+        if item[1] == day:
+            if item[2] == month:
+                #print(item)
+                return item
+        
 
 
 # Receive imD to return im (total insolation Month)
@@ -242,7 +253,6 @@ def im(imD, i = 0, sum = 0):
         im[i][0] += sum
         i += 1
         sum = 0
-    
     return im
 
 
@@ -286,123 +296,162 @@ def trm(locale, datapath): #Total Monthly Radiation
             difuse[i] = difuse[i]/4
     
     inpe = [direct[i]+difuse[i] for i in range(12)]
-    trm = [inpe[i] for i in range(12)]
+    trmAux = [inpe[i] for i in range(12)]
+    trm = []
 
     for i in range(12):
         if i == 0 or i == 2 or i == 4 or i == 6 or i == 7 or i == 9 or i == 11:
-            trm[i] = trm[i]*31  
-        elif i == 3 or i == 5 or i == 8 or i == 10:
-            trm[i] = trm[i]*30
+            trmAux[i] *= 31
+            trm.append([trmAux[i],i+1])
+            
+        elif i == 3 or i == 4 or i == 8 or i == 10:
+            trmAux[i] *= 30
+            trm.append([trmAux[i],i+1])        
         else: 
-            trm[i] = trm[i]*28 
+            trmAux[i] *= 28
+            trm.append([trmAux[i],i+1])
     
     return trm #Total Monthly Radiation
 
 
 # Returns Estimated Radiation for a given day (D) in Wh / m² (RED)
-def red(imD, im, trm, day = date.now().day, month = date.now().month):
-    week = []
-    mark = 0
-
-    if month == 1 or month == 3 or month == 5 or month == 7 or month == 8 or month == 10 or month == 12:
-        daysinmonth = 31  
-    elif month == 4 or month == 6 or month == 9 or month == 11:
-        daysinmonth = 30
-    else: 
-        daysinmonth = 28
-
-    for item in imD:
-        if day <= daysinmonth-6:
-            if day == item[1] or day + 1 == item[1] or day + 2 == item[1] or day + 3 == item[1] or day + 4 == item[1] or day + 5 == item[1] or day + 6 == item[1]:
-                if month == item[2]:
-                    week.append(item)
-        else:
-            for i in range(7):
-                if daysinmonth - day == i:
-                    mark = (7 - i) - 1
-            
-            if mark == 1:
-                if month == item[2]:
-                    if day == item[1] or day + 1 == item[1] or day + 2 == item[1] or day + 3 == item[1] or day + 4 == item[1] or day + 5 == item[1]:
-                        week.append(item)
-                elif month != 12 and month + 1 == item[2]:
-                    if mark == item[1]:
-                        week.append(item)
-                elif month == 12:
-                    if item[2] == 1:
-                        if mark == item[1]:
-                            week.append(item)
-
-            elif mark == 2:
-                if month == item[2]:
-                    if day == item[1] or day + 1 == item[1] or day + 2 == item[1] or day + 3 == item[1] or day + 4 == item[1]:
-                        week.append(item)
-                elif month != 12 and month + 1 == item[2]:
-                    if mark - 1 == item[1] or mark == item[1]:
-                        week.append(item)
-                elif month == 12:
-                    if item[2] == 1:
-                        if mark - 1 == item[1] or mark == item[1]:
-                            week.append(item)
-
-            elif mark == 3:
-                if month == item[2]:
-                    if day == item[1] or day + 1 == item[1] or day + 2 == item[1] or day + 3 == item[1]:
-                        week.append(item)
-                elif month != 12 and month + 1 == item[2]:
-                    if mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                        week.append(item)
-                elif month == 12:
-                    if item[2] == 1:
-                        if mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                            week.append(item)
-
-            elif mark == 4:
-                if month == item[2]:
-                    if day == item[1] or day + 1 == item[1] or day + 2 == item[1]:
-                        week.append(item)
-                elif month != 12 and month + 1 == item[2]:
-                    if mark - 3 == item[1] or mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                            week.append(item)
-                elif month == 12:
-                    if item[2] == 1:
-                        if mark - 3 == item[1] or mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                            week.append(item)
-
-            elif mark == 5:
-                if month == item[2]:
-                    if day == item[1] or day + 1 == item[1]:
-                        week.append(item)
-                elif month != 12 and month + 1 == item[2]:
-                    if mark - 4 == item[1] or mark - 3 == item[1] or mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                        week.append(item)
-                elif month == 12:
-                    if item[2] == 1:
-                        if mark - 4 == item[1] or mark - 3 == item[1] or mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                            week.append(item)
-            
-            else:
-                if month == item[2]:
-                    if day == item[1]:
-                        week.append(item)
-                elif month != 12 and month + 1 == item[2]:
-                    if mark - 5 == item[1] or mark - 4 == item[1] or mark - 3 == item[1] or mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                        week.append(item)
-                elif month == 12:
-                    if item[2] == 1:
-                        if mark - 5 == item[1] or mark - 4 == item[1] or mark - 3 == item[1] or mark - 2 == item[1] or mark - 1 == item[1] or mark == item[1]:
-                            week.append(item)
+def get_red(day, month, historical_insolation, trm_full):
+    imd = get_averageinsolation_for_day(day, month, historical_insolation)
+    im_full = im(averageinsolation(historical_insolation))
+    for item in im_full:
+        if item[1] == month:
+            _im = item
     
-    if month == 12 and mark:
-        i = 6
-        while True:
-            week.insert(0, week[-1])
-            del week[-1]
-            if i == mark:
-                break
-            else:
-                i -= 1
-
-    red = [[(trm[month+1]/im[month][0])*week[i][0], week[i][1], week[i][2]] for i in range (7)]
-
+    for item in trm_full:
+        if item[1] == month:
+            trm = item
+    
+    red = [(trm[0]/_im[0])*imd[0], day, month]
+    print(red)
     return red
+
+
+def get_red_full(historical_insolation, trm_full):
+    imd_full = averageinsolation(historical_insolation)
+    #print('imd_full: ', imd_full)
+    im_full = im(averageinsolation(historical_insolation))
+    #print('im_full', im_full)
+    #print('trm_full', trm_full)
+
+    red_full = []
+    for imd in imd_full:
+        for item in im_full:
+            if imd[2] == item[1]:
+                for trm in trm_full:
+                    if imd[2] == trm[1]:
+                        #print(get_red(imd[1], imd[2], historical_insolation, trm_full))
+                        red_full.append(get_red(imd[1], imd[2], historical_insolation, trm_full))
+    
+    return red_full
+
+
+def get_red_week(day, month, historical_insolation, trm_full):
+    week = []
+    for i in range(-4, 3):
+        if month == 4 or month == 6 or month == 9 or month == 11:
+            if day + i == -3:
+                auxd = 29
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -2:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -1:
+                auxd = 31
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 31:
+                auxd = 1
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 32:
+                auxd = 2
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            else:
+                auxd = day + i
+                auxm = month
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+        elif month == 2:
+            if day + i == -3:
+                auxd = 29
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -2:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -1:
+                auxd = 31
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 29:
+                auxd = 1
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 30:
+                auxd = 2
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            else:
+                auxd = day + i
+                auxm = month
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+        elif month == 1 or month == 8:
+            if day + i == -3:
+                auxd = 29
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -2:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -1:
+                auxd = 31
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 32:
+                auxd = 1
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 33:
+                auxd = 2
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            else:
+                auxd = day + i
+                auxm = month
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+        else:
+            if day + i == -3:
+                auxd = 28
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -2:
+                auxd = 20
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == -1:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 32:
+                auxd = 1
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 33:
+                auxd = 2
+                auxm = month+1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            else:
+                auxd = day + i
+                auxm = month
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+    
+    return week

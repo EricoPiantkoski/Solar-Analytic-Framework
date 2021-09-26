@@ -10,52 +10,69 @@ import csv
 import requests
 import time
 import json
+from datetime import datetime as date
 
 dir_base = os.path.dirname(os.path.abspath("./linuxServer"))
 dir_data = os.path.join(dir_base, "data/")
 #dir_bin = os.path.join(dir_base, "bin/")
 
+
 def send_to_api(daily, predict, url="https://gaes.pythonanywhere.com/f-data"):
     # print('daily:{}'.format(daily))
-    print('predict:{}'.format(predict))
-    for item in daily:
-        print('daily data: ', item)
-        data = { 
-            'id_esp' : 1,
-            'date_log': item[4],
-            'data':{
-                'spent': item[1],
-                'gain': item[3]
-            }
-        }   
-        post_data = json.dumps(data)
-        response = requests.post(url, json = post_data)
-    print(response.text)
+    # print('predict:{}'.format(predict))
+   
+    for pred in predict:
+        for daily_data in daily:
+            # print('pred: ', pred)
+            # print('daily_data: ', daily_data)
+            
+            if len(str(pred[1])) == 1:
+                day_aux = '0'+str(pred[1])
+            else:
+                day_aux = str(pred[1])
+            if len(str(pred[2])) == 1:
+                month_aux = '0'+str(pred[2])
+            else:
+                month_aux = str(pred[2])
+            
+            predict_date_compare = day_aux+'/'+month_aux+'/'+str(time.localtime()[0])
+            # print('predict_date_compare: ', predict_date_compare)
+            # print('daily_data[4]', daily_data[4])
 
-    for pdata in predict:
-        if len(str(pdata[1])) == 1:
-            pdata[1] = '0'+str(pdata[1])
-        
-        if len(str(pdata[2])) == 1:
-            pdata[2] = '0'+str(pdata[2])
+            if predict_date_compare == daily_data[4]:
+                data = { 
+                    'id_esp' : 1,
+                    'date_log': daily_data[4],
+                    'data':{
+                        'spent': daily_data[1],
+                        'gain': daily_data[3],
+                        'prediction': pred[0]
+                    }
+                }
+                post_data = json.dumps(data)
+                response = requests.post(url, json = post_data)
+                #print('added data: ', data)
+                break
+            else:
+                data = { 
+                    'id_esp' : 1,
+                    'date_log': predict_date_compare,
+                    'data':{
+                        'prediction': pred[0]
+                    }
+                }   
+                post_data = json.dumps(data)
+                response = requests.post(url, json = post_data)
+                #print('added data: ', data)
+       
+    print('data sent to API: ',response.text)
 
-        print('predict data: ', pdata)
-        data = { 
-            'id_esp' : 1,
-            'date_log': str(pdata[1])+'/'+str(pdata[2])+'/'+str(time.localtime()[0]),
-            'data':{
-                'prediction': pdata[0]
-            }
-        }   
-        post_data = json.dumps(data)
-        response = requests.post(url, json = post_data)
-    print(response.text)
 
 def start_prediction(ip):
     counter = 0
     historicinsolation = False
-    #clientLocation = location.geolocation(ip)
-    clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
+    clientLocation = location.geolocation(ip)
+    #clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
     clientLocation[3] = nearest_station.stateAbbreviation(clientLocation[3])
     bdmepStations = nearest_station.dirBDMEP(clientLocation, dir_data)
 
@@ -64,14 +81,8 @@ def start_prediction(ip):
         historicinsolation = metricApplications.bdmepcsvtolist(bdmepFileName, dir_data)
         counter += 1
 
-    # average daily isolation (photoperiod for each day) [imD, day, month]    
-    imd = metricApplications.averageinsolation(historicinsolation)
-
-    # List with 12 items corresponding to 12 months [total insolation Month (in hours), month]
-    im = metricApplications.im(imd)
-
     trm = metricApplications.trm(clientLocation, dir_data)
-    red = metricApplications.red(imd, im, trm)
+    red = metricApplications.get_red_week(date.now().day, date.now().month, historicinsolation, trm)
 
     return red
 
@@ -83,6 +94,8 @@ if __name__ == '__main__':
 
     while True:
         data = server.server(interface, port)
+        print('data from main server: ', data)
+        print('data type from main server: ', type(data))
         
         if type(data) is not str:
             daily_data = data
@@ -101,7 +114,6 @@ if __name__ == '__main__':
         else:
             ip = data
             prediction = start_prediction(ip)
-
         try:
             if daily_data:
                 send_to_api(daily_data, prediction)
