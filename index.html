@@ -30,32 +30,11 @@
         </h1>
     </div>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
-    </p>
-    <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
-    </p>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
-    </p>
-    <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
-    </p>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
-    </p>
-    <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
-    </p>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
-    </p>
-    <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+        Mais de dois milhões de pessoas não possuem acesso à energia elétrica no Brasil de acordo com o IBGE, enquanto a grande população que depende de hidrelétricas sofre constantemente com os aumentos nos preços gerados por escassez de água e má gestão. Uma alternativa para contornar esse problema encontra-se na utilização do Modelo Off-Grid no âmbito de Energia Solar. No entanto, a ausência de energia, por conta da sazonalidade, pode ser uma realidade para os usuários desse tipo de modelo. Este trabalho propõe a utilização de um algoritmo de predição de Radiação Solar implementado a um Sistema Embarcado (associado ao contexto de Internet das Coisas) à rede elétrica desse tipo de modelo, que infere aquisição e gasto de energia elétrica, afim de informar ao usuário se há necessidade de economia.
     </p>
 
     <div id=static-chart>
-        <h2>Gráfico Estático</h2>
+        <h2>Gerenciador de Energia</h2>
         <div style="width: 100%; overflow: auto; position: relative; width: 100%; ">
             <div style="width: 3000px; height: 300px; margin-bottom: 10px;">
                 <canvas class="bar-chart"  height="300" width="0"></canvas>
@@ -69,14 +48,50 @@
     <div id="about">
         <h2>Sobre o Projeto</h2>
         <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias consequatur omnis eligendi corporis culpa perferendis ducimus, fuga sapiente nobis fugiat ipsa quos cupiditate reprehenderit! Nisi corrupti voluptate quas blanditiis animi?
+            No Brasil, a geração de energia elétrica é fomentada majoritariamente por hidrelétricas. No entanto, diante das recentes crises hídricas e encarecimento desse processo de produção de energia elétrica, alternativas de obtenção de energia são cogitadas, como a fotovoltaica, que se utiliza do sol para gerar energia elétrica.
+        </p>
+        <p>
+            Nesse âmbito, a radiação solar incidente sobre a superfície terrestre é um fator crucial aos processos físicos e biológicos no planeta. Sua investigação tornou possível tanto a observação de seu potencial energético para a humanidade, como o desenvolvimento de tecnologias que a utilizam através da transformação de luz em eletricidade, por meio de semicondutores ou outros meios.
+        </p>
+        <p>
+            O aumento dos estudos da radiação solar como fonte de energia limpa e seus derivados avanços tecnológicos, permitiram a disseminação do uso da tecnologia como alternativa viável aos meios de obtenção de energia já existentes. Assim, o atual cenário de utilização convencional da energia solar denota dois principais sistemas de obtenção, os modelos On-Grid e Off-Grid.
+        </p>
+        <p>
+            Enquanto o modelo On-Grid é provido hibridamente por fontes de energia solar e hidrelétrica, com a finalidade de evitar a ausência de energia, bem como a utilização de baterias, que encarecem a instalação, o modelo Off-Grid é exclusivamente dependente do sol, prioritariamente utilizado como solução para demandas de energia em locais remotos.
+        </p>
+        <p>
+            Por conta do modelo Off-Grid não possuir outra fonte de energia senão o sol, a falta de energia derivada de curtos fotoperíodos, implica em uma baixa obtenção de radiação solar, o que pode ser considerado como fator problemático. A fim de consolidar a implementação desse modelo, se fazem necessárias informações meteorológicas do local de instalação.
+        </p>
+        <p>
+            Não existe, entretanto, um modo meteorológico de se prever radiação solar. As alternativas consistem na utilização de modelos matemáticos que preveem radiação solar global (dentre outras variáveis), bem como o uso de dados de satélites, informações estocásticas e empíricas.
+        </p>
+        <p>
+            Com a finalidade de amenizar a problemática e incentivar difusão do modelo Off-Grid em todas as regiões do país, este trabalho foi desenvolvido com intuito de utilizar conceitos computacionais para propor o desenvolvimento de um sistema embarcado, com auxílio do módulo de desenvolvimento ESP8266, que seja capaz de prever radiação solar, ler dados de obtenção e consumo de energia do usuário desse modelo e assim evitar a ausência de energia, observando o contexto de computação ubíqua. 
         </p>
     </div>
 
     <div id="author">
         <h2>Érico Piantkoski</h2>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, id? Distinctio in optio voluptates similique rerum molestiae tempore dolores. Distinctio nam cum maiores rem consequuntur accusamus dolorem sint itaque fuga.
+            Sou Érico Piantkoski, muito prazer :)
+        </p>
+        <p>
+            Atualmente estou me graduando em Ciência da Computação e trabalho em um projeto pessoal que ajuda pessoas com um sistema de energia solar a economizar energia, com uma proposta voltada a IoT. Nas horas vagas quando não estou me perdendo nas literaturas, sou um entusiasta na música. Estou escrevendo um livro também, mas por hora é secreto hehe.
+        </p>
+        <p>
+            Acredito na computação como solução para dificuldades cotidianas, então mais que aprender para crescer profissionalmente, busco crescer para mim, tentando resolver os meus próprios problemas (todos têm algum né?).
+        </p>
+        <p>
+            Alguns feitos relevantes na minha carreira profissional como desenvolvedor (e também como acadêmico) foram:
+            Colaborar com um sistema Java back-end, cuja proposta era intermediar servidores e colaboradores através de um app, afim de eliminar peso de processamento, permitindo transações em tempo real, por meio da criação e atualização de datawarehouse.
+        <p>
+            Contribuir para um projeto que propunha eliminar o percevejo Pentatomidae (que é praga nas plantações de soja), influenciando-o em sua reprodução por meio de vibração através de uma freqüência específica, assim dispensando o uso de pesticidas.
+        </p>
+        <p>
+            (ATUAL) Desenvolver um sistema de gerenciamento de energia solar em Python, que prevê radiação, para pessoas que possuem um sistema solar Off-Grid. Esse projeto é especificamente pensado para pessoas de baixa renda, unicamente dependentes de energia solar. A utilização de áreas de estudo como IoT, Sistemas Embarcados, Redes, Desenvolvimento Web, Desenvolvimento Back-End Python, API, Sistemas Operacionais, eticetera ad infinitum... Contribuíram mais que qualquer outro projeto para meu desenvolvimento pessoal.
+        </p>
+        <p>
+            Sou muito grato por todas as oportunidades que ja tive e aberto a novas experiências. Tecnologia move o mundo, música move corações, motivação move a mente.
         </p>
     </div>
 

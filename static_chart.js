@@ -10,6 +10,7 @@ async function get_api_data(date, esp_id, flag = null) {
         obj = await (await fetch(url)).json();
     } catch(e) {
         console.log('error');
+        return 0
     }
         if (flag){
             if(flag == 0){ // flag == 0 -> obj
@@ -40,31 +41,30 @@ async function set_chart(esp_id='1', date){
         data: {
             // Legendas das Barras
             labels: [
-                format_label_date(-2)+'/'+month, 
-                format_label_date(-1)+'/'+month, 
-                f_now+'/'+year, 
-                format_label_date(1)+'/'+month, 
-                format_label_date(2)+'/'+month, 
-                format_label_date(3)+'/'+month,
-                format_label_date(4)+'/'+month
+                add_left_zero(format_label_date(-4))+'/'+month, 
+                add_left_zero(format_label_date(-3))+'/'+month, 
+                add_left_zero(format_label_date(-2))+'/'+month,
+                add_left_zero(format_label_date(-1))+'/'+month, 
+                f_now, 
+                add_left_zero(format_label_date(1))+'/'+month,
+                add_left_zero(format_label_date(2))+'/'+month
             ],
             datasets: [{
                 label: 'Aquisição',
                 data: [
-                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 4),
-                    await get_api_data(f_now+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(-4)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(-3)+'/'+month+'/'+year, esp_id, 4),
+                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 4),
+                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(f_now+'/'+year, esp_id, 4),
                     await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(3)+'/'+month+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(4)+'/'+month+'/'+year, esp_id, 4),
+                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 4),
                 ],
                 backgroundColor: [
                     'rgba(84, 151, 90, 0.5)'
                 ],
                 borderColor: [
-                    'rgba(84, 151, 90, 1)',
-                                            
+                    'rgba(84, 151, 90, 1)',             
                 ],
                 // Define a espessura da borda dos retângulos
                 borderWidth: 1
@@ -72,13 +72,13 @@ async function set_chart(esp_id='1', date){
             {
                 label: 'Gasto',
                 data: [
-                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 3),
-                    await get_api_data(f_now+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(-4)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(-3)+'/'+month+'/'+year, esp_id, 3),
+                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 3),
+                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(f_now+'/'+year, esp_id, 3),
                     await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(3)+'/'+month+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(4)+'/'+month+'/'+year, esp_id, 3),
+                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 3),
                 ],
                 backgroundColor: [                           
                     'rgba(255, 99, 132, 0.5)'
@@ -92,13 +92,13 @@ async function set_chart(esp_id='1', date){
         {
             label: 'Previsão',
                 data: [
-                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 5),
-                    await get_api_data(f_now+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(-4)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(-3)+'/'+month+'/'+year, esp_id, 5),
+                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 5),
+                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(f_now+'/'+year, esp_id, 5),
                     await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(3)+'/'+month+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(4)+'/'+month+'/'+year, esp_id, 5),
+                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 5),
                 ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.5)'
@@ -129,7 +129,11 @@ async function set_chart(esp_id='1', date){
 function format_label_date(iterator){
     if (month == 5|| month == 7 || month == 10 || month ==12){
         if (iterator<0){
-            if (Number(day)-iterator==-1){
+            if (Number(day)-iterator==-3){
+                return '27'
+            }else if (Number(day)-iterator==-2){
+                return '28'
+            }else if (Number(day)-iterator==-1){
                 return '29'
             }else if (Number(day)-iterator==0){
                 return '30'
@@ -137,11 +141,7 @@ function format_label_date(iterator){
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(Number(day)+iterator==35){
-                return '04'
-            }else if(Number(day)+iterator==34){
-                return '03'
-            }else if(Number(day)+iterator==33){
+            if(Number(day)+iterator==33){
                 return '02'
             }else if(Number(day)+iterator==32){
                 return '01'
@@ -151,7 +151,19 @@ function format_label_date(iterator){
         }
     }else if (month == 3){
         if (iterator<0){
-            if (day-iterator==-1){
+            if (day-iterator==-3){
+                if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
+                    return '26'
+                }else{
+                    return '25'
+                }
+            }else if (day-iterator==-2){
+                if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
+                    return '27'
+                }else{
+                    return '26'
+                }
+            }else if (day-iterator==-1){
                 if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
                     return '28'
                 }else{
@@ -167,11 +179,7 @@ function format_label_date(iterator){
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(Number(day)+iterator==35){
-                return '04'
-            }else if(Number(day)+iterator==34){
-                return '03'
-            }else if(Number(day)+iterator==33){
+            if(Number(day)+iterator==33){
                 return '02'
             }else if(Number(day)+iterator==32){
                 return '01'
@@ -180,9 +188,12 @@ function format_label_date(iterator){
             }
         }
     }else if(month == 1 || month == 8){
-        
         if (iterator<0){
-            if (Number(day)-iterator==-1){
+            if (Number(day)-iterator==-3){
+                return '28'
+            }else if (Number(day)-iterator==-2){
+                return '29'
+            }else if (Number(day)-iterator==-1){
                 return '30'
             }else if (Number(day)-iterator==0){
                 return '31'
@@ -190,11 +201,7 @@ function format_label_date(iterator){
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(Number(day)+iterator==35){
-                return '04'
-            }else if(Number(day)+iterator==34){
-                return '03'
-            }else if(Number(day)+iterator==33){
+            if(Number(day)+iterator==33){
                 return '02'
             }else if(Number(day)+iterator==32){
                 return '01'
@@ -204,7 +211,11 @@ function format_label_date(iterator){
         }
     }else{
         if (iterator<0){
-            if (Number(day)-iterator==-1){
+            if (Number(day)-iterator==-3){
+                return '28'
+            }else if (Number(day)-iterator==-2){
+                return '29'
+            }else if (Number(day)-iterator==-1){
                 return '30'
             }else if (Number(day)-iterator==0){
                 return '31'
@@ -212,11 +223,7 @@ function format_label_date(iterator){
                 return Number(day)+iterator
             }
         }else if(iterator>0){
-            if(Number(day)+iterator==34){
-                return '04'
-            }else if(Number(day)+iterator==33){
-                return '03'
-            }else if(Number(day)+iterator==32){
+            if(Number(day)+iterator==32){
                 return '02'
             }else if(Number(day)+iterator==31){
                 return '01'
@@ -225,7 +232,19 @@ function format_label_date(iterator){
             }
         }
     }
+
+    
+
 }
+
+function add_left_zero(item){
+    item = item.toString()
+    if(item.length == 1){
+        return "0"+item
+    }else{
+        return(item)
+    }
+}   
 
 date = new Date();
 day = String(date.getDate()).padStart(2, '0');
