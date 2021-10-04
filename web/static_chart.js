@@ -41,24 +41,24 @@ async function set_chart(esp_id='1', date){
         data: {
             // Legendas das Barras
             labels: [
-                add_left_zero(format_label_date(-4))+'/'+month, 
-                add_left_zero(format_label_date(-3))+'/'+month, 
-                add_left_zero(format_label_date(-2))+'/'+month,
-                add_left_zero(format_label_date(-1))+'/'+month, 
+                add_left_zero(format_label_date(-4)), 
+                add_left_zero(format_label_date(-3)), 
+                add_left_zero(format_label_date(-2)),
+                add_left_zero(format_label_date(-1)), 
                 f_now, 
-                add_left_zero(format_label_date(1))+'/'+month,
-                add_left_zero(format_label_date(2))+'/'+month
+                add_left_zero(format_label_date(1)),
+                add_left_zero(format_label_date(2))
             ],
             datasets: [{
                 label: 'Aquisição',
                 data: [
-                    await get_api_data(format_label_date(-4)+'/'+month+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(-3)+'/'+month+'/'+year, esp_id, 4),
-                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 4),
-                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(-4)+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(-3)+'/'+year, esp_id, 4),
+                    await get_api_data(format_label_date(-2)+'/'+year, esp_id, 4),
+                    await get_api_data(format_label_date(-1)+'/'+year, esp_id, 4), 
                     await get_api_data(f_now+'/'+year, esp_id, 4),
-                    await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 4),
+                    await get_api_data(format_label_date(1)+'/'+year, esp_id, 4), 
+                    await get_api_data(format_label_date(2)+'/'+year, esp_id, 4),
                 ],
                 backgroundColor: [
                     'rgba(84, 151, 90, 0.5)'
@@ -72,13 +72,13 @@ async function set_chart(esp_id='1', date){
             {
                 label: 'Gasto',
                 data: [
-                    await get_api_data(format_label_date(-4)+'/'+month+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(-3)+'/'+month+'/'+year, esp_id, 3),
-                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 3),
-                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(-4)+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(-3)+'/'+year, esp_id, 3),
+                    await get_api_data(format_label_date(-2)+'/'+year, esp_id, 3),
+                    await get_api_data(format_label_date(-1)+'/'+year, esp_id, 3), 
                     await get_api_data(f_now+'/'+year, esp_id, 3),
-                    await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 3),
+                    await get_api_data(format_label_date(1)+'/'+year, esp_id, 3), 
+                    await get_api_data(format_label_date(2)+'/'+year, esp_id, 3),
                 ],
                 backgroundColor: [                           
                     'rgba(255, 99, 132, 0.5)'
@@ -92,13 +92,13 @@ async function set_chart(esp_id='1', date){
         {
             label: 'Previsão',
                 data: [
-                    await get_api_data(format_label_date(-4)+'/'+month+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(-3)+'/'+month+'/'+year, esp_id, 5),
-                    await get_api_data(format_label_date(-2)+'/'+month+'/'+year, esp_id, 5),
-                    await get_api_data(format_label_date(-1)+'/'+month+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(-4)+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(-3)+'/'+year, esp_id, 5),
+                    await get_api_data(format_label_date(-2)+'/'+year, esp_id, 5),
+                    await get_api_data(format_label_date(-1)+'/'+year, esp_id, 5), 
                     await get_api_data(f_now+'/'+year, esp_id, 5),
-                    await get_api_data(format_label_date(1)+'/'+month+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(2)+'/'+month+'/'+year, esp_id, 5),
+                    await get_api_data(format_label_date(1)+'/'+year, esp_id, 5), 
+                    await get_api_data(format_label_date(2)+'/'+year, esp_id, 5),
                 ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.5)'
@@ -127,114 +127,119 @@ async function set_chart(esp_id='1', date){
 }
 
 function format_label_date(iterator){
+    console.log("iterator = ", iterator)
+    console.log("month = ", month)
     if (month == 5|| month == 7 || month == 10 || month ==12){
         if (iterator<0){
-            if (Number(day)-iterator==-3){
-                return '27'
-            }else if (Number(day)-iterator==-2){
-                return '28'
-            }else if (Number(day)-iterator==-1){
-                return '29'
-            }else if (Number(day)-iterator==0){
-                return '30'
+            if (Number(day)+iterator==-3){
+                return '27'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==-2){
+                return '28'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==-1){
+                return '29'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==0){
+                return '30'+'/'+add_left_zero((month-1))
             }else {
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }else if(iterator>0){
             if(Number(day)+iterator==33){
-                return '02'
+                if (month == 12){
+                    return '02/01'
+                }
+                return '02'+'/'+add_left_zero(month)
             }else if(Number(day)+iterator==32){
-                return '01'
+                if (month == 12){
+                    return '01/01'
+                }
+                return '01'+'/'+add_left_zero(month)
             }else {
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }
     }else if (month == 3){
         if (iterator<0){
-            if (day-iterator==-3){
+            if (day+iterator==-3){
                 if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
-                    return '26'
+                    return '26'+'/'+add_left_zero((month-1))
                 }else{
-                    return '25'
+                    return '25'+'/'+add_left_zero((month-1))
                 }
-            }else if (day-iterator==-2){
+            }else if (day+iterator==-2){
                 if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
-                    return '27'
+                    return '27'+'/'+add_left_zero((month-1))
                 }else{
-                    return '26'
+                    return '26'+'/'+add_left_zero((month-1))
                 }
-            }else if (day-iterator==-1){
+            }else if (day+iterator==-1){
                 if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
-                    return '28'
+                    return '28'+'/'+add_left_zero((month-1))
                 }else{
-                    return '27'
+                    return '27'+'/'+add_left_zero((month-1))
                 }
-            }else if (day-iterator==0){
+            }else if (day+iterator==0){
                 if ((year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0))){
-                    return '29'
+                    return '29'+'/'+add_left_zero((month-1))
                 }else{
-                    return '28'
+                    return '28'+'/'+add_left_zero((month-1))
                 }
             }else {
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }else if(iterator>0){
             if(Number(day)+iterator==33){
-                return '02'
+                return '02'+'/'+add_left_zero(month+1)
             }else if(Number(day)+iterator==32){
-                return '01'
+                return '01'+'/'+add_left_zero(month+1)
             }else {
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }
     }else if(month == 1 || month == 8){
         if (iterator<0){
-            if (Number(day)-iterator==-3){
-                return '28'
-            }else if (Number(day)-iterator==-2){
-                return '29'
-            }else if (Number(day)-iterator==-1){
-                return '30'
-            }else if (Number(day)-iterator==0){
-                return '31'
+            if (Number(day)+iterator==-3){
+                return '28'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==-2){
+                return '29'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==-1){
+                return '30'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==0){
+                return '31'+'/'+add_left_zero((month-1))
             }else {
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }else if(iterator>0){
             if(Number(day)+iterator==33){
-                return '02'
+                return '02'+'/'+add_left_zero(month+1)
             }else if(Number(day)+iterator==32){
-                return '01'
+                return '01'+'/'+add_left_zero(month+1)
             }else {
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }
     }else{
         if (iterator<0){
-            if (Number(day)-iterator==-3){
-                return '28'
-            }else if (Number(day)-iterator==-2){
-                return '29'
-            }else if (Number(day)-iterator==-1){
-                return '30'
-            }else if (Number(day)-iterator==0){
-                return '31'
+            if (Number(day)+iterator==-3){
+                return '28'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==-2){
+                return '29'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==-1){
+                return '30'+'/'+add_left_zero((month-1))
+            }else if (Number(day)+iterator==0){
+                return '31'+'/'+add_left_zero((month-1))
             }else {                
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }else if(iterator>0){
             if(Number(day)+iterator==32){
-                return '02'
+                return '02'+'/'+add_left_zero(month+1)
             }else if(Number(day)+iterator==31){
-                return '01'
+                return '01'+'/'+add_left_zero(month+1)
             }else {                
-                return Number(day)+iterator
+                return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }
     }
-
-    
-
 }
 
 function add_left_zero(item){

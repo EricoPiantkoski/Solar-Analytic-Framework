@@ -317,6 +317,7 @@ def trm(locale, datapath): #Total Monthly Radiation
 # Returns Estimated Radiation for a given day (D) in Wh / m² (RED)
 def get_red(day, month, historical_insolation, trm_full):
     imd = get_averageinsolation_for_day(day, month, historical_insolation)
+    #print('imd: ', imd)
     im_full = im(averageinsolation(historical_insolation))
     for item in im_full:
         if item[1] == month:
@@ -325,6 +326,7 @@ def get_red(day, month, historical_insolation, trm_full):
     for item in trm_full:
         if item[1] == month:
             trm = item
+    
     
     red = [(trm[0]/_im[0])*imd[0], day, month]
     print(red)
@@ -355,14 +357,18 @@ def get_red_week(day, month, historical_insolation, trm_full):
     for i in range(-4, 3):
         if month == 4 or month == 6 or month == 9 or month == 11:
             if day + i == -3:
-                auxd = 29
+                auxd = 28
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -2:
-                auxd = 30
+                auxd = 29
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -1:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 0:
                 auxd = 31
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
@@ -380,14 +386,18 @@ def get_red_week(day, month, historical_insolation, trm_full):
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
         elif month == 2:
             if day + i == -3:
-                auxd = 29
+                auxd = 28
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -2:
-                auxd = 30
+                auxd = 29
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -1:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 0:
                 auxd = 31
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
@@ -405,14 +415,18 @@ def get_red_week(day, month, historical_insolation, trm_full):
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
         elif month == 1 or month == 8:
             if day + i == -3:
-                auxd = 29
+                auxd = 28
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -2:
-                auxd = 30
+                auxd = 29
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -1:
+                auxd = 30
+                auxm = month-1
+                week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+            elif day + i == 0:
                 auxd = 31
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
@@ -428,16 +442,16 @@ def get_red_week(day, month, historical_insolation, trm_full):
                 auxd = day + i
                 auxm = month
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
-        else:
+        else: #month = 3, 5, 7, 10, 12
             if day + i == -3:
                 auxd = 28
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             elif day + i == -2:
-                auxd = 20
+                auxd = 29
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))
-            elif day + i == -1:
+            elif day + i == 0:
                 auxd = 30
                 auxm = month-1
                 week.append(get_red(auxd, auxm, historical_insolation, trm_full))

@@ -74,6 +74,7 @@ def start_prediction(ip):
     clientLocation = location.geolocation(ip)
     #clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
     clientLocation[3] = nearest_station.stateAbbreviation(clientLocation[3])
+    print('clientlocation: ',clientLocation)
     bdmepStations = nearest_station.dirBDMEP(clientLocation, dir_data)
 
     while not historicinsolation:
@@ -104,12 +105,14 @@ if __name__ == '__main__':
                     spamwriter = csv.writer(csvFile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
                     spamwriter.writerow(['Spent Ah/d', 'Spent Wh/d', 'Gain Ah/d', 'Gain Wh/d', 'Datelog'])
                     for item in daily_data:
+                        print('w --', item)
                         spamwriter.writerow(item)
                     
             else:
                 with open(empirical_data, 'a') as csvFile:
                     spamwriter = csv.writer(csvFile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
                     for item in daily_data:
+                        print('a --', item)
                         spamwriter.writerow(item)
         else:
             ip = data

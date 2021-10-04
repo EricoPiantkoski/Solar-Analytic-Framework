@@ -1,27 +1,30 @@
 import sys
 import urequests
 import socket
-#from packages.lib.module import recvall
+import dataRequest
+import os
 
-def clientSet(host, port): 
+def client(host, port, data):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host, port))
 
-    ip = urequests.get('http://icanhazip.com').text.replace("\n", "")
-    #print(type(ip))
-    outmsg = ip.encode('ascii')
-    sock.sendall(outmsg)
-    #reply = recvall.recvall(sock, 16)
-    #reply = sock.recv(1024).decode('ascii')
-    #print('the server said {}'.format(repr(reply)))
+    if type(data) is not str:
+        data = work_list_to_send(data)
+    data = data.encode('ascii')
+    sock.sendall(data)
+    
+    # data = sock.recv(1024)
+    # data = data.decode('ascii')
+    # print(data)
     sock.close()
 
-def clientData(host, port, gain):#, spent):
-    print(gain)
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((host, port))
-    gain = str(gain)+'/'
-    spent = str(spent)
-    outmsg = (gain+spent).encode('ascii')
-    sock.sendall(outmsg)
-    sock.close()
+
+def work_list_to_send(list):
+    work_list = ''
+    for item in list:
+        work_list += (str(item))
+    work_list = work_list.replace('][', '_')
+    work_list = work_list.replace(']', '')
+    work_list = work_list.replace('[', '')
+    return work_list
+
