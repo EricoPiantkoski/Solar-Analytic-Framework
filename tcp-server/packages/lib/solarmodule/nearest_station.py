@@ -7,26 +7,27 @@ from time import sleep
 def stateAbbreviation(state): #state abbreviation
     print('selected state:', state+'\n')
     state = state.lower()
+    print('state: ', state)
 
     if state == 'acre':
         state = 'AC'
     elif state == 'alagoas':
         state = 'AL'
-    elif state == 'amapa':
+    elif state == 'amapa' or state == 'amapá':
         state = 'AP'
-    elif state == 'amazonas':
+    elif state == 'amazonas' or state == 'amazônas':
         state = 'AM'
     elif state == 'bahia':
         state = 'BA'
-    elif state == 'ceara':
+    elif state == 'ceara' or state == 'ceará':
         state = 'CE'
     elif state == 'distrito federal':
         state = 'DF'
-    elif state == 'espirito santo':
+    elif state == 'espirito santo' or state == 'espírito santo':
         state = 'ES'
-    elif state == 'goias':
+    elif state == 'goias' or state == 'goiás':
         state = 'GO'
-    elif state == 'maranhao':
+    elif state == 'maranhao' or state == 'maranhão':
         state = 'MA'
     elif state == 'mato grosso':
         state = 'MT'
@@ -34,15 +35,15 @@ def stateAbbreviation(state): #state abbreviation
         state = 'MS'
     elif state == 'minas gerais':
         state = 'MG'
-    elif state == 'para':
+    elif state == 'para' or state == 'pará':
         state = 'PA'
-    elif state == 'paraiba':
+    elif state == 'paraiba' or state == 'paraíba':
         state = 'PB'
-    elif state == 'parana':
+    elif state == 'parana' or state == 'paraná':
         state = 'PR'
     elif state == 'pernambuco':
         state = 'PE'
-    elif state == 'piaui':
+    elif state == 'piaui' or state == 'piauí':
         state = 'PI'
     elif state == 'rio de janeiro':
         state = 'RJ'
@@ -50,13 +51,13 @@ def stateAbbreviation(state): #state abbreviation
         state = 'RN'
     elif state == 'rio grande do sul':
         state = 'RS'
-    elif state == 'rondonia':
+    elif state == 'rondonia' or state == 'rondônia':
         state = 'RO'
     elif state == 'roraima':
         state = 'RR'
     elif state == 'santa catarina':
         state = 'SC'
-    elif state == 'sao paulo':
+    elif state == 'sao paulo' or state == 'são paulo':
         state = 'SP'
     elif state == 'sergipe':
         state = 'SE'
@@ -108,12 +109,12 @@ def dirBDMEP(locale, dir_data):
                     break
                 if line[4] == locale[3]: # Compare if the State is the same 
                     stationsSameState.append(line)
-        ''' 
-        if station:
-            print('station = ', station)
-            print('Station selected:', station[3], station[4])
-            return str(station[0])
-        '''
+        
+        # if station:
+        #     print('station = ', station)
+        #     print('Station selected:', station[3], station[4])
+        #     return str(station[0])
+        
         print('Defining distance between stations...')
 
         print('Selected stations:\n')

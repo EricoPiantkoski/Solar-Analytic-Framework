@@ -8,8 +8,11 @@ gc.collect()
 
 # ssid = 'Casa do Kami'
 # password = 'Hall!159'
-ssid = 'iPhone'
-password = 'havanna123'
+ssid = 'LAB-REDES-PIROKA'
+password = '314Lyoto413UN'
+
+# ssid = 'iPhone'
+# password = 'havanna123'
 
 ap_if = network.WLAN(network.AP_IF)
 station = network.WLAN(network.STA_IF)

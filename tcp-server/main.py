@@ -1,43 +1,125 @@
 from bin.server import server
 from packages.lib.module import location
 from packages.lib.solarmodule import nearest_station, searchData, metricApplications
-#from bin.client import client
-import os
-import argparse
-import asyncio
-import select
-import csv
-import requests
-import time
-import json
-from datetime import datetime as date
+import os, argparse, select, csv, requests, time, json
+from datetime import datetime, timedelta
 
+# import argparse
+# import asyncio
+# import select
+# import csv
+# import requests
+# import time
+# import json
+
+flag = 1
 dir_base = os.path.dirname(os.path.abspath("./linuxServer"))
 dir_data = os.path.join(dir_base, "data/")
 #dir_bin = os.path.join(dir_base, "bin/")
 
+def eficience(prediction, daily_data, empirical_data, ip):
+    month = datetime.now().month-1
+    gain = 0
+    counter = 0
+    avpred = 0
+    flag = 0
 
-def send_to_api(daily, predict, url="https://gaes.pythonanywhere.com/f-data"):
-    # print('daily:{}'.format(daily))
-    # print('predict:{}'.format(predict))
-   
-    for pred in predict:
-        for daily_data in daily:
-            # print('pred: ', pred)
-            # print('daily_data: ', daily_data)
+    if month == 1:
+        month = '12'
+    else:
+        if len(str(month)) == 1:
+            month = '0'+str(month)
+        else:
+            month = str(month)
+    
+    if empirical_data in os.listdir(dir_data):
+        with open (empirical_data, 'r') as csv_data:
+            lines = csv.reader(csv_data)
+            next(lines)
+            for line in reversed(list(lines)):
+                line = line[0].split(';')
+                if flag == 0:
+                    last = line
+                    flag = 1
+                
+                if line[4][3:] == str(month)+'/'+str(datetime.now().year):
+                    gain += float(line[3])
+                    counter += 1
+                    print(line)
+
+            if counter == 0:
+                gain = float(last[3])
+            else:
+                gain /= counter
+                counter = 0
             
-            if len(str(pred[1])) == 1:
-                day_aux = '0'+str(pred[1])
+            pred7 = start_prediction(ip, 1)
+            for item in pred7:
+                avpred += item[0]
+                counter += 1
+            avpred /= counter
+            efic = int((100*gain)/avpred)
+            print('eficience = {}%'.format(efic))
+            return efic
+
+    else:
+        for item in daily_data:
+            gain = item[3]
+            counter += 1
+        gain /= counter
+        avpred /= counter
+        efic = int((100*gain)/avpred)
+        print('eficience = {}%'.format(efic))
+        return efic
+
+
+def get_eficience(esp_id = 1):
+    endpoint = "https://gaes.pythonanywhere.com/req?date="
+    eficience = 100
+    for i in range(100):
+        date_to_req = datetime.today() - timedelta(days = i)
+        date_to_req = add_left_zero(date_to_req.day)+'/'+add_left_zero(date_to_req.month)+'/'+str(date_to_req.year)
+        response = requests.get(endpoint+date_to_req+"&esp-id="+str(esp_id))
+        print(response.json())
+        try: 
+            eficience = response.json()['data']['eficience']
+            print('(get_eficience) eficience: ', eficience)
+            return eficience
+        except:
+            print('pass')
+            pass
+    
+    return eficience
+
+def add_left_zero(item):
+    if len(str(item)) == 1:
+        item = '0'+str(item)
+    return str(item)
+
+def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywhere.com/f-data"):
+
+    if eficience == 0:
+        # eficience = get_eficience(esp_id)
+        eficience = get_eficience()
+    # elif eficience < get_eficience(esp_id):
+    elif eficience < get_eficience():
+        # eficience = get_eficience(esp_id)
+        eficience = get_eficience()
+    
+    print('(send_to_api) eficience: {}%'.format(eficience))
+   
+    for prediction in predictions:
+        for daily_data in daily:          
+            if len(str(prediction[1])) == 1:
+                day_aux = '0'+str(prediction[1])
             else:
-                day_aux = str(pred[1])
-            if len(str(pred[2])) == 1:
-                month_aux = '0'+str(pred[2])
+                day_aux = str(prediction[1])
+            if len(str(prediction[2])) == 1:
+                month_aux = '0'+str(prediction[2])
             else:
-                month_aux = str(pred[2])
+                month_aux = str(prediction[2])
             
             predict_date_compare = day_aux+'/'+month_aux+'/'+str(time.localtime()[0])
-            # print('predict_date_compare: ', predict_date_compare)
-            # print('daily_data[4]', daily_data[4])
 
             if predict_date_compare == daily_data[4]:
                 data = { 
@@ -46,33 +128,33 @@ def send_to_api(daily, predict, url="https://gaes.pythonanywhere.com/f-data"):
                     'data':{
                         'spent': daily_data[1],
                         'gain': daily_data[3],
-                        'prediction': pred[0]
+                        'prediction': prediction[0],
+                        'eficience': eficience
                     }
                 }
                 post_data = json.dumps(data)
                 response = requests.post(url, json = post_data)
-                #print('added data: ', data)
                 break
             else:
                 data = { 
                     'id_esp' : 1,
                     'date_log': predict_date_compare,
                     'data':{
-                        'prediction': pred[0]
+                        'prediction': prediction[0],
+                        'eficience': eficience
                     }
                 }   
                 post_data = json.dumps(data)
                 response = requests.post(url, json = post_data)
-                #print('added data: ', data)
        
     print('data sent to API: ',response.text)
 
 
-def start_prediction(ip):
+def start_prediction(ip, flag=0):
     counter = 0
     historicinsolation = False
-    clientLocation = location.geolocation(ip)
-    #clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
+    #clientLocation = location.geolocation(ip)
+    clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
     clientLocation[3] = nearest_station.stateAbbreviation(clientLocation[3])
     print('clientlocation: ',clientLocation)
     bdmepStations = nearest_station.dirBDMEP(clientLocation, dir_data)
@@ -83,7 +165,7 @@ def start_prediction(ip):
         counter += 1
 
     trm = metricApplications.trm(clientLocation, dir_data)
-    red = metricApplications.get_red_week(date.now().day, date.now().month, historicinsolation, trm)
+    red = metricApplications.get_red_week(datetime.now().day, datetime.now().month, historicinsolation, trm, flag)
 
     return red
 
@@ -95,31 +177,36 @@ if __name__ == '__main__':
 
     while True:
         data = server.server(interface, port)
-        print('data from main server: ', data)
-        print('data type from main server: ', type(data))
         
         if type(data) is not str:
             daily_data = data
             if not empirical_data in os.listdir(dir_data):
-                with open(empirical_data, 'w') as csvFile:
-                    spamwriter = csv.writer(csvFile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
+                with open(empirical_data, 'w') as csvfile:
+                    spamwriter = csv.writer(csvfile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
                     spamwriter.writerow(['Spent Ah/d', 'Spent Wh/d', 'Gain Ah/d', 'Gain Wh/d', 'Datelog'])
                     for item in daily_data:
-                        print('w --', item)
                         spamwriter.writerow(item)
                     
             else:
-                with open(empirical_data, 'a') as csvFile:
-                    spamwriter = csv.writer(csvFile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
+                with open(empirical_data, 'a') as csvfile:
+                    lines = csv.reader(csvfile)
+                    spamwriter = csv.writer(csvfile, delimiter =';', quoting=csv.QUOTE_MINIMAL)
                     for item in daily_data:
-                        print('a --', item)
                         spamwriter.writerow(item)
+
         else:
             ip = data
             prediction = start_prediction(ip)
         try:
             if daily_data:
-                send_to_api(daily_data, prediction)
+                if flag == 1:
+                    eficience = eficience(prediction, daily_data, empirical_data, ip)
+                    send_to_api(daily_data, prediction, eficience)
+                    flag = 0
+                elif datetime.now().day == 1:
+                    eficience = eficience(prediction, daily_data, empirical_data, ip)
+                    send_to_api(daily_data, prediction, eficience)
+                else:
+                    send_to_api(daily_data, prediction)
         except:
             pass
-    
