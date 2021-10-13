@@ -1,4 +1,4 @@
-async function get_api_data(date, esp_id, flag = null) {
+async function api_consum(date, esp_id, flag = null) {
     if(date.length == 9){
         date = "0"+date
     }
@@ -33,7 +33,7 @@ async function get_api_data(date, esp_id, flag = null) {
 
 async function set_chart(esp_id='1', date){
 
-    esp_data = await get_api_data(date, esp_id);
+    esp_data = await api_consum(date, esp_id);
     var ctx = document.getElementsByClassName("bar-chart");
     //solve_data()          
     var charGraph = new Chart(ctx, {
@@ -52,13 +52,13 @@ async function set_chart(esp_id='1', date){
             datasets: [{
                 label: 'Aquisição',
                 data: [
-                    await get_api_data(format_label_date(-4)+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(-3)+'/'+year, esp_id, 4),
-                    await get_api_data(format_label_date(-2)+'/'+year, esp_id, 4),
-                    await get_api_data(format_label_date(-1)+'/'+year, esp_id, 4), 
-                    await get_api_data(f_now+'/'+year, esp_id, 4),
-                    await get_api_data(format_label_date(1)+'/'+year, esp_id, 4), 
-                    await get_api_data(format_label_date(2)+'/'+year, esp_id, 4),
+                    await api_consum(format_label_date(-4)+'/'+year, esp_id, 4), 
+                    await api_consum(format_label_date(-3)+'/'+year, esp_id, 4),
+                    await api_consum(format_label_date(-2)+'/'+year, esp_id, 4),
+                    await api_consum(format_label_date(-1)+'/'+year, esp_id, 4), 
+                    await api_consum(f_now+'/'+year, esp_id, 4),
+                    await api_consum(format_label_date(1)+'/'+year, esp_id, 4), 
+                    await api_consum(format_label_date(2)+'/'+year, esp_id, 4),
                 ],
                 backgroundColor: [
                     'rgba(84, 151, 90, 0.5)'
@@ -72,13 +72,13 @@ async function set_chart(esp_id='1', date){
             {
                 label: 'Gasto',
                 data: [
-                    await get_api_data(format_label_date(-4)+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(-3)+'/'+year, esp_id, 3),
-                    await get_api_data(format_label_date(-2)+'/'+year, esp_id, 3),
-                    await get_api_data(format_label_date(-1)+'/'+year, esp_id, 3), 
-                    await get_api_data(f_now+'/'+year, esp_id, 3),
-                    await get_api_data(format_label_date(1)+'/'+year, esp_id, 3), 
-                    await get_api_data(format_label_date(2)+'/'+year, esp_id, 3),
+                    await api_consum(format_label_date(-4)+'/'+year, esp_id, 3), 
+                    await api_consum(format_label_date(-3)+'/'+year, esp_id, 3),
+                    await api_consum(format_label_date(-2)+'/'+year, esp_id, 3),
+                    await api_consum(format_label_date(-1)+'/'+year, esp_id, 3), 
+                    await api_consum(f_now+'/'+year, esp_id, 3),
+                    await api_consum(format_label_date(1)+'/'+year, esp_id, 3), 
+                    await api_consum(format_label_date(2)+'/'+year, esp_id, 3),
                 ],
                 backgroundColor: [                           
                     'rgba(255, 99, 132, 0.5)'
@@ -92,13 +92,13 @@ async function set_chart(esp_id='1', date){
         {
             label: 'Previsão',
                 data: [
-                    await get_api_data(format_label_date(-4)+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(-3)+'/'+year, esp_id, 5),
-                    await get_api_data(format_label_date(-2)+'/'+year, esp_id, 5),
-                    await get_api_data(format_label_date(-1)+'/'+year, esp_id, 5), 
-                    await get_api_data(f_now+'/'+year, esp_id, 5),
-                    await get_api_data(format_label_date(1)+'/'+year, esp_id, 5), 
-                    await get_api_data(format_label_date(2)+'/'+year, esp_id, 5),
+                    await api_consum(format_label_date(-4)+'/'+year, esp_id, 5), 
+                    await api_consum(format_label_date(-3)+'/'+year, esp_id, 5),
+                    await api_consum(format_label_date(-2)+'/'+year, esp_id, 5),
+                    await api_consum(format_label_date(-1)+'/'+year, esp_id, 5), 
+                    await api_consum(f_now+'/'+year, esp_id, 5),
+                    await api_consum(format_label_date(1)+'/'+year, esp_id, 5), 
+                    await api_consum(format_label_date(2)+'/'+year, esp_id, 5),
                 ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.5)'

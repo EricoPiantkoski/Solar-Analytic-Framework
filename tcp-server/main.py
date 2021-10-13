@@ -4,15 +4,7 @@ from packages.lib.solarmodule import nearest_station, searchData, metricApplicat
 import os, argparse, select, csv, requests, time, json
 from datetime import datetime, timedelta
 
-# import argparse
-# import asyncio
-# import select
-# import csv
-# import requests
-# import time
-# import json
-
-flag = 1
+flag = 1 #testar sem flag
 dir_base = os.path.dirname(os.path.abspath("./linuxServer"))
 dir_data = os.path.join(dir_base, "data/")
 #dir_bin = os.path.join(dir_base, "bin/")
@@ -69,22 +61,25 @@ def eficience(prediction, daily_data, empirical_data, ip):
         gain /= counter
         avpred /= counter
         efic = int((100*gain)/avpred)
-        print('eficience = {}%'.format(efic))
+        print('(else) eficience = {}%'.format(efic))
         return efic
 
 
 def get_eficience(esp_id = 1):
     endpoint = "https://gaes.pythonanywhere.com/req?date="
     eficience = 100
+    global flag
     for i in range(100):
-        date_to_req = datetime.today() - timedelta(days = i)
-        date_to_req = add_left_zero(date_to_req.day)+'/'+add_left_zero(date_to_req.month)+'/'+str(date_to_req.year)
-        response = requests.get(endpoint+date_to_req+"&esp-id="+str(esp_id))
-        print(response.json())
-        try: 
+        try:
+            date_to_req = datetime.today() - timedelta(days = i)
+            date_to_req = add_left_zero(date_to_req.day)+'/'+add_left_zero(date_to_req.month)+'/'+str(date_to_req.year)
+            response = requests.get(endpoint+date_to_req+"&esp-id="+str(esp_id))
+            print(response.json())
+            
             eficience = response.json()['data']['eficience']
             print('(get_eficience) eficience: ', eficience)
             return eficience
+
         except:
             print('pass')
             pass
@@ -97,14 +92,19 @@ def add_left_zero(item):
     return str(item)
 
 def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywhere.com/f-data"):
-
+    print('(send to API) eficience: {}%'.format(eficience))
+    global flag
+    api_eficience = get_eficience()
     if eficience == 0:
         # eficience = get_eficience(esp_id)
-        eficience = get_eficience()
+        eficience = api_eficience
     # elif eficience < get_eficience(esp_id):
-    elif eficience < get_eficience():
+    elif eficience > api_eficience:
         # eficience = get_eficience(esp_id)
-        eficience = get_eficience()
+        eficience = api_eficience
+        if eficience == 100:
+            flag = 1
+        
     
     print('(send_to_api) eficience: {}%'.format(eficience))
    
