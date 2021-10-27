@@ -51,7 +51,7 @@ def eficience(prediction, daily_data, empirical_data, ip):
                 counter += 1
             avpred /= counter
             efic = int((100*gain)/avpred)
-            print('eficience = {}%'.format(efic))
+            # print('eficience = {}%'.format(efic))
             return efic
 
     else:
@@ -61,7 +61,7 @@ def eficience(prediction, daily_data, empirical_data, ip):
         gain /= counter
         avpred /= counter
         efic = int((100*gain)/avpred)
-        print('(else) eficience = {}%'.format(efic))
+        # print('(else) eficience = {}%'.format(efic))
         return efic
 
 
@@ -70,18 +70,18 @@ def get_eficience(esp_id = 1):
     eficience = 100
     global flag
     for i in range(100):
+        date_to_req = datetime.today() - timedelta(days = i)
+        date_to_req = add_left_zero(date_to_req.day)+'/'+add_left_zero(date_to_req.month)+'/'+str(date_to_req.year)
         try:
-            date_to_req = datetime.today() - timedelta(days = i)
-            date_to_req = add_left_zero(date_to_req.day)+'/'+add_left_zero(date_to_req.month)+'/'+str(date_to_req.year)
             response = requests.get(endpoint+date_to_req+"&esp-id="+str(esp_id))
             print(response.json())
             
             eficience = response.json()['data']['eficience']
-            print('(get_eficience) eficience: ', eficience)
+            # print('(get_eficience) eficience: ', eficience)
             return eficience
 
         except:
-            print('pass')
+            print('verification attempt number {}'.format(i))
             pass
     
     return eficience
@@ -92,7 +92,7 @@ def add_left_zero(item):
     return str(item)
 
 def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywhere.com/f-data"):
-    print('(send to API) eficience: {}%'.format(eficience))
+    # print('(send to API) eficience: {}%'.format(eficience))
     global flag
     api_eficience = get_eficience()
     if eficience == 0:
@@ -106,10 +106,14 @@ def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywh
             flag = 1
         
     
-    print('(send_to_api) eficience: {}%'.format(eficience))
+    print('(send_to_api2) eficience: {}%'.format(eficience))
+
+    # print('prediction', predictions)
    
     for prediction in predictions:
-        for daily_data in daily:          
+        for daily_data in daily:         
+            # print('daily_data: ', daily_data[4])
+            # print('prediction', prediction) 
             if len(str(prediction[1])) == 1:
                 day_aux = '0'+str(prediction[1])
             else:
@@ -122,6 +126,9 @@ def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywh
             predict_date_compare = day_aux+'/'+month_aux+'/'+str(time.localtime()[0])
 
             if predict_date_compare == daily_data[4]:
+                # print('predict_date_compare == daily_data')
+                # print('predict_date_compare: ', predict_date_compare)
+                # print('daily_data[4]: ', daily_data[4])
                 data = { 
                     'id_esp' : 1,
                     'date_log': daily_data[4],
@@ -132,10 +139,14 @@ def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywh
                         'eficience': eficience
                     }
                 }
+                print('added data: ', data)
                 post_data = json.dumps(data)
                 response = requests.post(url, json = post_data)
+                # print('response: ', response.text)
                 break
-            else:
+            elif (daily_data == daily[-1]):
+                # print('daily_data: ', daily_data)
+                # print('daily[-1]: ',daily[-1])
                 data = { 
                     'id_esp' : 1,
                     'date_log': predict_date_compare,
@@ -143,9 +154,13 @@ def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywh
                         'prediction': prediction[0],
                         'eficience': eficience
                     }
-                }   
+                }
+                print('added data: ', data)   
                 post_data = json.dumps(data)
                 response = requests.post(url, json = post_data)
+                # print('response: ', response.text)
+            else:
+                pass
        
     print('data sent to API: ',response.text)
 
@@ -166,6 +181,7 @@ def start_prediction(ip, flag=0):
 
     trm = metricApplications.trm(clientLocation, dir_data)
     red = metricApplications.get_red_week(datetime.now().day, datetime.now().month, historicinsolation, trm, flag)
+    # red = metricApplications.get_red_full(historicinsolation, trm)
 
     return red
 

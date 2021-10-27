@@ -22,8 +22,8 @@ async def tasker():
 
     
     #host = '192.168.2.100' #casa do kami
-    host = '172.168.31.101' #lab de redes
-    #host = '172.20.10.2' # iphone
+    #host = '172.168.31.101' #lab de redes
+    host = '172.20.10.2' # iphone
     port = 50000 #can generate OSError
     public_ip = get_public_ip()
 

@@ -3,6 +3,8 @@ from os import chdir, getcwd
 from datetime import datetime as date
 
 
+
+
 def bdmepcsvtolist(file, datapath): # Turns bdmepdata.txt in list: historicalinsolation = [photoperiod, day, month, year]
                               #                                                     [hours(float), str, str , str ]
     historicinsolation = []
@@ -620,3 +622,5 @@ def get_red_week(day, month, historical_insolation, trm_full, flag=0):
                     week.append(get_red(auxd, auxm, historical_insolation, trm_full))
 
     return week
+
+

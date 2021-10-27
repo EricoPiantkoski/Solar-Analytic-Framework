@@ -8,6 +8,7 @@ gc.collect()
 
 # ssid = 'Casa do Kami'
 # password = 'Hall!159'
+
 ssid = 'LAB-REDES-PIROKA'
 password = '314Lyoto413UN'
 
