@@ -1,4 +1,5 @@
 async function api_consum(date, esp_id, flag = null) {
+    //console.log(date)
     if(date.length == 9){
         date = "0"+date
     }
@@ -24,15 +25,16 @@ async function api_consum(date, esp_id, flag = null) {
             }else if(flag == 4){ // flag == 4 -> gain
                 return obj.data.gain
             }else if(flag == 5){ // flag == 5 -> prediction
-                console.log(obj)
                 return obj.data.prediction
+            }else if(flag == 6){ // flag == 5 -> eficience
+                return obj.data.eficience
             }
         }
         return obj
     }
 
 async function set_chart(esp_id='1', date){
-
+    //document.write('Eficience: ', await api_consum(format_label_date(-4)+'/'+year,esp_id,6), '%')
     esp_data = await api_consum(date, esp_id);
     var ctx = document.getElementsByClassName("bar-chart");
     //solve_data()          
@@ -49,6 +51,15 @@ async function set_chart(esp_id='1', date){
                 add_left_zero(format_label_date(1)),
                 add_left_zero(format_label_date(2))
             ],
+            // labels: [
+            //     '13/09', 
+            //     '14/09', 
+            //     '15/09',
+            //     '16/09', 
+            //     '17/09', 
+            //     '18/09',
+            //     '19/09'
+            // ],
             datasets: [{
                 label: 'Aquisição',
                 data: [
@@ -60,6 +71,15 @@ async function set_chart(esp_id='1', date){
                     await api_consum(format_label_date(1)+'/'+year, esp_id, 4), 
                     await api_consum(format_label_date(2)+'/'+year, esp_id, 4),
                 ],
+                // data: [
+                //     await api_consum('13/09'+'/'+year, esp_id, 4), 
+                //     await api_consum('14/09'+'/'+year, esp_id, 4),
+                //     await api_consum('15/09'+'/'+year, esp_id, 4),
+                //     await api_consum('16/09'+'/'+year, esp_id, 4), 
+                //     await api_consum('17/09'+'/'+year, esp_id, 4),
+                //     await api_consum('18/09'+'/'+year, esp_id, 4), 
+                //     await api_consum('19/09'+'/'+year, esp_id, 4),
+                // ],
                 backgroundColor: [
                     'rgba(84, 151, 90, 0.5)'
                 ],
@@ -80,6 +100,15 @@ async function set_chart(esp_id='1', date){
                     await api_consum(format_label_date(1)+'/'+year, esp_id, 3), 
                     await api_consum(format_label_date(2)+'/'+year, esp_id, 3),
                 ],
+                // data: [
+                //     await api_consum('13/09'+'/'+year, esp_id, 3), 
+                //     await api_consum('14/09'+'/'+year, esp_id, 3),
+                //     await api_consum('15/09'+'/'+year, esp_id, 3),
+                //     await api_consum('16/09'+'/'+year, esp_id, 3), 
+                //     await api_consum('17/09'+'/'+year, esp_id, 3),
+                //     await api_consum('18/09'+'/'+year, esp_id, 3), 
+                //     await api_consum('19/09'+'/'+year, esp_id, 3),
+                // ],
                 backgroundColor: [                           
                     'rgba(255, 99, 132, 0.5)'
                 ],
@@ -100,6 +129,15 @@ async function set_chart(esp_id='1', date){
                     await api_consum(format_label_date(1)+'/'+year, esp_id, 5), 
                     await api_consum(format_label_date(2)+'/'+year, esp_id, 5),
                 ],
+                // data: [
+                //     await api_consum('13/09'+'/'+year, esp_id, 5), 
+                //     await api_consum('14/09'+'/'+year, esp_id, 5),
+                //     await api_consum('15/09'+'/'+year, esp_id, 5),
+                //     await api_consum('16/09'+'/'+year, esp_id, 5), 
+                //     await api_consum('17/09'+'/'+year, esp_id, 5),
+                //     await api_consum('18/09'+'/'+year, esp_id, 5), 
+                //     await api_consum('19/09'+'/'+year, esp_id, 5),
+                // ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.5)'
                 ],
@@ -124,11 +162,10 @@ async function set_chart(esp_id='1', date){
             }
         }
     });
+    //document.write('aaa')
 }
 
 function format_label_date(iterator){
-    console.log("iterator = ", iterator)
-    console.log("month = ", month)
     if (month == 5|| month == 7 || month == 10 || month ==12){
         if (iterator<0){
             if (Number(day)+iterator==-3){
@@ -140,6 +177,7 @@ function format_label_date(iterator){
             }else if (Number(day)+iterator==0){
                 return '30'+'/'+add_left_zero((month-1))
             }else {
+                // return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
                 return add_left_zero(Number(day)+iterator)+'/'+add_left_zero(month)
             }
         }else if(iterator>0){
@@ -259,3 +297,10 @@ f_now = day+'/'+month
 //console.log(f_now)
 
 set_chart(1, f_now+'/'+year);
+
+// d = new Date()
+// nd = new Date()
+// nd.setDate(d.getDate()-14);
+// document.write(nd);
+// m = String(nd.getMonth()+1)
+// document.write(String(nd.getMonth()+1).padStart(2, '0'))
