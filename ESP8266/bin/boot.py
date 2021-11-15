@@ -6,11 +6,8 @@ import gc
 esp.osdebug(None)
 gc.collect()
 
-# ssid = 'Casa do Kami'
-# password = 'Hall!159'
-
-ssid = 'LAB-REDES-PIROKA'
-password = '314Lyoto413UN'
+ssid = 'ELIETE RODRIGUEZ'
+password = '14224178'
 
 # ssid = 'iPhone'
 # password = 'havanna123'
