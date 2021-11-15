@@ -26,7 +26,7 @@ async function api_consum(date, esp_id, flag = null) {
                 return obj.data.gain
             }else if(flag == 5){ // flag == 5 -> prediction
                 return obj.data.prediction
-            }else if(flag == 6){ // flag == 5 -> eficience
+            }else if(flag == 6){ // flag == 6 -> eficience
                 return obj.data.eficience
             }
         }
@@ -34,7 +34,9 @@ async function api_consum(date, esp_id, flag = null) {
     }
 
 async function set_chart(esp_id='1', date){
-    //document.write('Eficience: ', await api_consum(format_label_date(-4)+'/'+year,esp_id,6), '%')
+    console.log('Eficience: ', await api_consum(format_label_date(-4)+'/'+year,esp_id,6), '%')
+    var eficience = await api_consum(f_now+'/'+year, esp_id, 6)
+
     esp_data = await api_consum(date, esp_id);
     var ctx = document.getElementsByClassName("bar-chart");
     //solve_data()          
@@ -51,15 +53,6 @@ async function set_chart(esp_id='1', date){
                 add_left_zero(format_label_date(1)),
                 add_left_zero(format_label_date(2))
             ],
-            // labels: [
-            //     '13/09', 
-            //     '14/09', 
-            //     '15/09',
-            //     '16/09', 
-            //     '17/09', 
-            //     '18/09',
-            //     '19/09'
-            // ],
             datasets: [{
                 label: 'Aquisição',
                 data: [
@@ -71,15 +64,6 @@ async function set_chart(esp_id='1', date){
                     await api_consum(format_label_date(1)+'/'+year, esp_id, 4), 
                     await api_consum(format_label_date(2)+'/'+year, esp_id, 4),
                 ],
-                // data: [
-                //     await api_consum('13/09'+'/'+year, esp_id, 4), 
-                //     await api_consum('14/09'+'/'+year, esp_id, 4),
-                //     await api_consum('15/09'+'/'+year, esp_id, 4),
-                //     await api_consum('16/09'+'/'+year, esp_id, 4), 
-                //     await api_consum('17/09'+'/'+year, esp_id, 4),
-                //     await api_consum('18/09'+'/'+year, esp_id, 4), 
-                //     await api_consum('19/09'+'/'+year, esp_id, 4),
-                // ],
                 backgroundColor: [
                     'rgba(84, 151, 90, 0.5)'
                 ],
@@ -100,15 +84,6 @@ async function set_chart(esp_id='1', date){
                     await api_consum(format_label_date(1)+'/'+year, esp_id, 3), 
                     await api_consum(format_label_date(2)+'/'+year, esp_id, 3),
                 ],
-                // data: [
-                //     await api_consum('13/09'+'/'+year, esp_id, 3), 
-                //     await api_consum('14/09'+'/'+year, esp_id, 3),
-                //     await api_consum('15/09'+'/'+year, esp_id, 3),
-                //     await api_consum('16/09'+'/'+year, esp_id, 3), 
-                //     await api_consum('17/09'+'/'+year, esp_id, 3),
-                //     await api_consum('18/09'+'/'+year, esp_id, 3), 
-                //     await api_consum('19/09'+'/'+year, esp_id, 3),
-                // ],
                 backgroundColor: [                           
                     'rgba(255, 99, 132, 0.5)'
                 ],
@@ -121,23 +96,22 @@ async function set_chart(esp_id='1', date){
         {
             label: 'Previsão',
                 data: [
-                    await api_consum(format_label_date(-4)+'/'+year, esp_id, 5), 
-                    await api_consum(format_label_date(-3)+'/'+year, esp_id, 5),
-                    await api_consum(format_label_date(-2)+'/'+year, esp_id, 5),
-                    await api_consum(format_label_date(-1)+'/'+year, esp_id, 5), 
-                    await api_consum(f_now+'/'+year, esp_id, 5),
-                    await api_consum(format_label_date(1)+'/'+year, esp_id, 5), 
-                    await api_consum(format_label_date(2)+'/'+year, esp_id, 5),
+                    // await api_consum(format_label_date(-4)+'/'+year, esp_id, 5)*0.1, 
+                    // await api_consum(format_label_date(-3)+'/'+year, esp_id, 5)*0.1,
+                    // await api_consum(format_label_date(-2)+'/'+year, esp_id, 5)*0.1,
+                    // await api_consum(format_label_date(-1)+'/'+year, esp_id, 5)*0.1, 
+                    // await api_consum(f_now+'/'+year, esp_id, 5)*0.1,
+                    // await api_consum(format_label_date(1)+'/'+year, esp_id, 5)*0.1, 
+                    // await api_consum(format_label_date(2)+'/'+year, esp_id, 5)*0.1,
+
+                    await api_consum(format_label_date(-4)+'/'+year, esp_id, 5)* eficience/100, 
+                    await api_consum(format_label_date(-3)+'/'+year, esp_id, 5)* eficience/100,
+                    await api_consum(format_label_date(-2)+'/'+year, esp_id, 5)* eficience/100,
+                    await api_consum(format_label_date(-1)+'/'+year, esp_id, 5)* eficience/100, 
+                    await api_consum(f_now+'/'+year, esp_id, 5)* eficience/100,
+                    await api_consum(format_label_date(1)+'/'+year, esp_id, 5)* eficience/100, 
+                    await api_consum(format_label_date(2)+'/'+year, esp_id, 5)* eficience/100,
                 ],
-                // data: [
-                //     await api_consum('13/09'+'/'+year, esp_id, 5), 
-                //     await api_consum('14/09'+'/'+year, esp_id, 5),
-                //     await api_consum('15/09'+'/'+year, esp_id, 5),
-                //     await api_consum('16/09'+'/'+year, esp_id, 5), 
-                //     await api_consum('17/09'+'/'+year, esp_id, 5),
-                //     await api_consum('18/09'+'/'+year, esp_id, 5), 
-                //     await api_consum('19/09'+'/'+year, esp_id, 5),
-                // ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.5)'
                 ],

@@ -4,7 +4,7 @@ from packages.lib.solarmodule import nearest_station, searchData, metricApplicat
 import os, argparse, select, csv, requests, time, json
 from datetime import datetime, timedelta
 
-flag = 1 #testar sem flag
+flag = 1 #testar sem flag #verificação de predição
 dir_base = os.path.dirname(os.path.abspath("./linuxServer"))
 dir_data = os.path.join(dir_base, "data/")
 #dir_bin = os.path.join(dir_base, "bin/")
@@ -30,6 +30,7 @@ def eficience(prediction, daily_data, empirical_data, ip):
             next(lines)
             for line in reversed(list(lines)):
                 line = line[0].split(';')
+                print('analysing line: ', line)
                 if flag == 0:
                     last = line
                     flag = 1
@@ -37,10 +38,19 @@ def eficience(prediction, daily_data, empirical_data, ip):
                 if line[4][3:] == str(month)+'/'+str(datetime.now().year):
                     gain += float(line[3])
                     counter += 1
-                    print(line)
+                    print('line {} == {}'.format(line, str(month)+'/'+str(datetime.now().year)))
+                    print('gain', gain)
+                    print('counter: ', counter)
 
             if counter == 0:
-                gain = float(last[3])
+                try:
+                    gain = float(last[3])
+                except:
+                    for line in reversed(list(lines)):
+                        last = line
+                        print('last == line {}'.format(line))
+                        gain = float(last[3])
+                        break
             else:
                 gain /= counter
                 counter = 0
@@ -51,7 +61,7 @@ def eficience(prediction, daily_data, empirical_data, ip):
                 counter += 1
             avpred /= counter
             efic = int((100*gain)/avpred)
-            # print('eficience = {}%'.format(efic))
+            print('eficience from pred7= {}%'.format(efic))
             return efic
 
     else:
@@ -165,11 +175,11 @@ def send_to_api(daily, predictions, eficience = 0, url="https://gaes.pythonanywh
     print('data sent to API: ',response.text)
 
 
-def start_prediction(ip, flag=0):
+def start_prediction(ip, flag = 0):
     counter = 0
     historicinsolation = False
-    #clientLocation = location.geolocation(ip)
-    clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
+    clientLocation = location.geolocation(ip)
+    #clientLocation = [-15.5961, -56.0967, 'Cuiabá', 'Mato Grosso']
     clientLocation[3] = nearest_station.stateAbbreviation(clientLocation[3])
     print('clientlocation: ',clientLocation)
     bdmepStations = nearest_station.dirBDMEP(clientLocation, dir_data)
