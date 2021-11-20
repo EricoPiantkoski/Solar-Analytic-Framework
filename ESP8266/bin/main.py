@@ -20,7 +20,7 @@ async def tasker():
     global port
     global daily_data
 
-    host = '192.168.15.22' # casa da mamis
+    host = '192.168.15.22' 
     #host = '172.20.10.2' # iphone
     port = 50000 #can generate OSError
     public_ip = get_public_ip()

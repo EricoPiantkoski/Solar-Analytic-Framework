@@ -33,11 +33,11 @@ def server (interface, port):
             #data = message.split(',')
             data = work_incoming_list(message)
             sc.close()
-            print('socket close')
+            print('SOCKET CLOSED')
             return data
         else:
             ip = message 
-            print('socket closed')
+            print('SOCKET CLOSED')
             sc.close()
             return ip
             # red = start_prediction(ip)
