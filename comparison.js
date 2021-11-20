@@ -165,7 +165,7 @@ function comparison(esp_id){
         for(i = -3; i<=-1; i++){
             olddata = toGet(format_label_date(i)+'/'+year, esp_id)
             olddata = JSON.parse(olddata)
-            console.log('olddata: ', olddata.data.spent)
+            console.log('gasto anterior ', olddata.data.spent)
             average_spent += olddata.data.spent
             console.log('spent', average_spent)
             count++ 
@@ -189,19 +189,19 @@ function comparison(esp_id){
         console.log('estimated gain 90%', estimated_gain * 0.9)
         
         if (average_spent >= estimated_gain * 1.2){
-            console.log('data.spent >= 120% estimated_gain')
+            console.log('média de gasto >= 120% estimated_gain')
             document.write('Economia extremamente recomendada')
         }else if(average_spent >= estimated_gain * 1.1){
-            console.log('data.spent >= 110% estimated_gain')
+            console.log('média de gasto >= 110% estimated_gain')
             document.write('Economia fortemente recomendada')
         }else if(average_spent >= estimated_gain){
-            console.log('data.spent >= estimated_gain')
+            console.log('média de gasto >= estimated_gain')
             document.write('Economia recomendada')
         }else if(average_spent >= estimated_gain * 0.9){
-            console.log('data.spent >= 90% estimated_gain')
+            console.log('média de gasto >= 90% estimated_gain')
             document.write('Nível de energia aceitável')
         }else{
-            console.log('data.spent >= 80% estimated_gain')
+            console.log('média de gasto < 90% estimated_gain')
             document.write('Nível de energia boa')
         }
     }catch{
