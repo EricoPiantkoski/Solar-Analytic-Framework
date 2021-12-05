@@ -10,7 +10,6 @@ def bdmepcsvtolist(file, datapath): # Turns bdmepdata.txt in list: historicalins
     historicinsolation = []
     lista = []
     
-    
     with open(file, 'r', encoding='ISO-8859-1') as bdmepFile:
         bdmepFileR = csv.reader(bdmepFile, delimiter= ';')
         for line in bdmepFileR:
@@ -235,6 +234,8 @@ def get_averageinsolation_for_day(day, month, historical_insolation):
     #print('imd: ', imd)
     
     for item in imd:
+        # print('item', item[1])
+        # print('day', day)
         if item[1] == day:
             if item[2] == month:
                 #print(item)
@@ -330,6 +331,9 @@ def get_red(day, month, historical_insolation, trm_full):
             trm = item
     
     
+    # print(imd[0])
+    # print(day)
+    # print(month)
     red = [(trm[0]/_im[0])*imd[0], day, month]
     print(red)
     return red
@@ -359,6 +363,7 @@ def get_red_week(day, month, historical_insolation, trm_full, flag=0):
     week = []
     if flag == 0:
         for i in range(-4, 3):
+            #print('day + i', day+i)
             if month == 4 or month == 6 or month == 9 or month == 11:
                 if day + i == -3:
                     auxd = 28
@@ -448,10 +453,14 @@ def get_red_week(day, month, historical_insolation, trm_full, flag=0):
                     week.append(get_red(auxd, auxm, historical_insolation, trm_full))
             else: #month = 3, 5, 7, 10, 12
                 if day + i == -3:
-                    auxd = 28
+                    auxd = 27
                     auxm = month-1
                     week.append(get_red(auxd, auxm, historical_insolation, trm_full))
                 elif day + i == -2:
+                    auxd = 28
+                    auxm = month-1
+                    week.append(get_red(auxd, auxm, historical_insolation, trm_full))
+                elif day + i == -1:
                     auxd = 29
                     auxm = month-1
                     week.append(get_red(auxd, auxm, historical_insolation, trm_full))

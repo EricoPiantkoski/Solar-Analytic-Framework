@@ -39,8 +39,9 @@ def eficience(prediction, daily_data, empirical_data, ip):
                     gain += float(line[3])
                     counter += 1
                     print('line {} == {}'.format(line, str(month)+'/'+str(datetime.now().year)))
-                    print('gain', gain)
-                    print('counter: ', counter)
+                    print('gain\n', gain)
+                    
+                    #print('counter: ', counter)
 
             if counter == 0:
                 try:
